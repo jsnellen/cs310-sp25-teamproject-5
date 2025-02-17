@@ -25,7 +25,7 @@ public class Main {
         
         System.err.println("Test Badge: " + b.toString());
         System.err.println("Test Punch: " + p.toString());
-        System.err.println("Test Punch: " + p1.toString());
+        System.err.println("Test Punch: " + p1.printOriginal());
 
     }
 
@@ -34,3 +34,4 @@ public class Main {
 // Triston Ballard
 // Marc Compton
 // Jakolbe Brewster
+// Maverick Burchfield
