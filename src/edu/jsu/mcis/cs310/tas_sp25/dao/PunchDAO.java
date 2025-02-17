@@ -39,8 +39,11 @@ public class PunchDAO {
 
                     while (rs.next()) {
 
+                        String terminalid = rs.getString("terminalid");
+                        String badgeid = rs.getString("badgeid");
                         String timestamp = rs.getString("timestamp");
-                        punch = new Punch(id, timestamp);
+                        String eventtypeid = rs.getString("eventtypeid");
+                        punch = new Punch(id, terminalid, badgeid, timestamp, eventtypeid);
 
                     }
 
