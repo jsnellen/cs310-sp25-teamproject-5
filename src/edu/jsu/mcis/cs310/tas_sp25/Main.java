@@ -17,12 +17,15 @@ public class Main {
 
         Badge b = badgeDAO.find("C4F37EFF");
 
-        Punch p = punchDAO.find("147");
+        Punch p = punchDAO.find(147);
+
+        Punch p1 = punchDAO.find(3433);
         
         // output should be "Test Badge: #C4F37EFF (Welch, Travis C)"
         
         System.err.println("Test Badge: " + b.toString());
         System.err.println("Test Punch: " + p.toString());
+        System.err.println("Test Punch: " + p1.toString());
 
     }
 

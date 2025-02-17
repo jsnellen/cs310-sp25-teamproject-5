@@ -15,7 +15,8 @@ public class PunchDAO {
 
     }
 
-    public Punch find(String id) {
+
+    public Punch find(int id) {
 
         Punch punch = null;
 
@@ -29,7 +30,7 @@ public class PunchDAO {
             if (conn.isValid(0)) {
 
                 ps = conn.prepareStatement(QUERY_FIND);
-                ps.setString(1, id);
+                ps.setString(1, String.valueOf(id));
 
                 boolean hasresults = ps.execute();
 
@@ -39,10 +40,10 @@ public class PunchDAO {
 
                     while (rs.next()) {
 
-                        String terminalid = rs.getString("terminalid");
+                        int terminalid = rs.getInt("terminalid");
                         String badgeid = rs.getString("badgeid");
                         String timestamp = rs.getString("timestamp");
-                        String eventtypeid = rs.getString("eventtypeid");
+                        int eventtypeid = rs.getInt("eventtypeid");
                         punch = new Punch(id, terminalid, badgeid, timestamp, eventtypeid);
 
                     }
