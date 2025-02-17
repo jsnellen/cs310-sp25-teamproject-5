@@ -15,4 +15,6 @@ import com.github.cliftonlabs.json_simple.*;
  */
 public final class DAOUtility {
 
+    JsonArray j = new JsonArray();
+
 }
