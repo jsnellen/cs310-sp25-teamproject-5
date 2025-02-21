@@ -1,6 +1,9 @@
 package edu.jsu.mcis.cs310.tas_sp25;
 
 import edu.jsu.mcis.cs310.tas_sp25.dao.*;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
 
 public class Main {
 
@@ -20,6 +23,14 @@ public class Main {
         Punch p = punchDAO.find(147);
 
         Punch p1 = punchDAO.find(3433);
+
+        LocalDate ts = LocalDate.of(2018, Month.SEPTEMBER, 17);
+
+
+        Badge b1 = badgeDAO.find("67637925");
+
+        ArrayList<Punch> p2 = punchDAO.list(b1, ts);
+
         
         // output should be "Test Badge: #C4F37EFF (Welch, Travis C)"
         
@@ -27,6 +38,9 @@ public class Main {
         System.err.println("Test Punch: " + p.toString());
         System.err.println("Test Punch: " + p1.printOriginal());
 
+        for (Punch a : p2) {
+            System.err.println(a.printOriginal());
+        }
     }
 
 }
