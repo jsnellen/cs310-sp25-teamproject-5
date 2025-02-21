@@ -20,15 +20,12 @@ public class Main {
 
         Badge b = badgeDAO.find("C4F37EFF");
 
+        /******* TESTING PUNCH CLASS STUFF */
+
         Punch p = punchDAO.find(147);
-
         Punch p1 = punchDAO.find(3433);
-
         LocalDate ts = LocalDate.of(2018, Month.SEPTEMBER, 17);
-
-
         Badge b1 = badgeDAO.find("67637925");
-
         ArrayList<Punch> p2 = punchDAO.list(b1, ts);
 
         
@@ -41,6 +38,8 @@ public class Main {
         for (Punch a : p2) {
             System.err.println(a.printOriginal());
         }
+
+        /////****** END TESTING PUNCH CLASS STUFF */
     }
 
 }

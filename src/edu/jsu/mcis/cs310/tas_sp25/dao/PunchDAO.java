@@ -19,6 +19,9 @@ public class PunchDAO {
     }
 
 
+    ///////******* RETURNS PUNCH GIVEN PUNCH ID */
+    /// 
+    /// 
     public Punch find(int id) {
 
         Punch punch = null;
@@ -82,6 +85,9 @@ public class PunchDAO {
 
     }
 
+    /////***** RETURNS LIST OF PUNCHES GIVEN BADGE AND DATE */
+    /// 
+    /// 
     public ArrayList<Punch> list(Badge badgeid, LocalDate timestamp) {
 
         Punch punch = null;
