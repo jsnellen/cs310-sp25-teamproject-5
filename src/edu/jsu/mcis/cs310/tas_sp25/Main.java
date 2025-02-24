@@ -40,6 +40,14 @@ public class Main {
         }
 
         /////****** END TESTING PUNCH CLASS STUFF */
+        /// 
+        /// 
+        /// ***** EMPLOYEE TEST
+        /// 
+        EmployeeDAO employeeDAO = daoFactory.getEmployeeDAO();
+        
+        Employee e = employeeDAO.find(1);
+        System.err.println("Test Employee: " + e.toString());
     }
 
 }
