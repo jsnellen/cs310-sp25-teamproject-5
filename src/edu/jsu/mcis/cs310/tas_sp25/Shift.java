@@ -8,32 +8,46 @@ import java.time.format.DateTimeFormatter;
 public class Shift {
     
     private final String description;
-    private final int shiftStart, shiftStop, lunchStart, lunchStop;
-    private final int id, roundInterval, gracePeriod, dockPenalty, lunchThreshold;
+    private final LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
+    private final int id, roundinterval, graceperiod, dockpenalty, lunchthreshold, lunchduration, shiftduration;
     
     // Constructor accepting a HashMap
     public Shift(Map<String, String> shiftDetails) {
         this.id = parseInt(shiftDetails.get("id"));
         this.description = shiftDetails.getOrDefault("description", "");
-        this.shiftStart = parseTimeToMinutes(shiftDetails.get("shiftstart"));
-        this.shiftStop = parseTimeToMinutes(shiftDetails.get("shiftstop"));
-        this.roundInterval = parseInt(shiftDetails.get("roundinterval"));
-        this.gracePeriod = parseInt(shiftDetails.get("graceperiod"));
-        this.dockPenalty = parseInt(shiftDetails.get("dockpenalty"));
-        this.lunchStart = parseTimeToMinutes(shiftDetails.get("lunchstart"));
-        this.lunchStop = parseTimeToMinutes(shiftDetails.get("lunchstop"));
-        this.lunchThreshold = parseInt(shiftDetails.get("lunchthreshold"));
+        this.shiftstart = parseTime(shiftDetails.get("shiftstart"));
+        this.shiftstop = parseTime(shiftDetails.get("shiftstop"));
+        this.roundinterval = parseInt(shiftDetails.get("roundinterval"));
+        this.graceperiod = parseInt(shiftDetails.get("graceperiod"));
+        this.dockpenalty = parseInt(shiftDetails.get("dockpenalty"));
+        this.lunchstart = parseTime(shiftDetails.get("lunchstart"));
+        this.lunchstop = parseTime(shiftDetails.get("lunchstop"));
+        this.lunchthreshold = parseInt(shiftDetails.get("lunchthreshold"));
+        this.lunchduration = parseTimeToMinutes(shiftDetails.get("lunchduration"));
+        this.shiftduration = parseTimeToMinutes(shiftDetails.get("shiftduration"));
     }
     
     // Helper method to parse integer values safely
     private int parseInt(String value) {
-        if (value == null || value.isEmpty()) {
-            return 0;
+    if (value == null || value.isEmpty()) {
+        return 0;
+    }
+    try {
+        return Integer.parseInt(value);
+    } catch (NumberFormatException e) {
+        return 0; // Default value in case of invalid input
+    }
+    }
+    
+    // Helper method to parse time values safely
+    private LocalTime parseTime(String time) {
+        if (time == null || time.isEmpty()) {
+            return null;
         }
         try {
-            return Integer.parseInt(value);
-        } catch (NumberFormatException e) {
-            return 0; // Default value in case of invalid input
+            return LocalTime.parse(time);
+        } catch (DateTimeParseException e) {
+            return null; // Handle invalid time formats
         }
     }
     
@@ -58,35 +72,43 @@ public class Shift {
         return description;
     }
 
-    public int getShiftStart() {
-        return shiftStart;
+    public LocalTime getShiftStart() {
+        return shiftstart;
     }
 
-    public int getShiftStop() {
-        return shiftStop;
+    public LocalTime getShiftStop() {
+        return shiftstop;
     }
 
     public int getRoundInterval() {
-        return roundInterval;
+        return roundinterval;
     }
 
     public int getGracePeriod() {
-        return gracePeriod;
+        return graceperiod;
     }
 
     public int getDockPenalty() {
-        return dockPenalty;
+        return dockpenalty;
     }
 
-    public int getLunchStart() {
-        return lunchStart;
+    public LocalTime getLunchStart() {
+        return lunchstart;
     }
 
-    public int getLunchStop() {
-        return lunchStop;
+    public LocalTime getLunchStop() {
+        return lunchstop;
     }
 
     public int getLunchThreshold() {
-        return lunchThreshold;
+        return lunchthreshold;
+    }
+    
+    public int getLunchDuration() {
+        return lunchduration;
+    }
+    
+    public int getShiftDuration() {
+        return shiftduration;
     }
 }
