@@ -22,7 +22,19 @@ public class Department {
     public int getTerminalid(){
         return terminalid;
     }
-    
+        @Override
+    public String toString() {
+
+        StringBuilder s = new StringBuilder();
+
+        s.append('#').append(id).append(' ');
+        s.append('(').append(description).append(')');
+        s.append(", Terminal ID: ");
+        s.append(terminalid);
+
+        return s.toString();
+
+    }
 }
 
 
