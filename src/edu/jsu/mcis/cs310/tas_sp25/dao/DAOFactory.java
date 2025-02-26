@@ -41,11 +41,11 @@ public final class DAOFactory {
     public PunchDAO getPunchDAO() {
         return new PunchDAO(this);
     }
-    /* 
-    public ShiftDAO getShiftDao() {
+    
+    public ShiftDAO getShiftDAO() {
         return new ShiftDAO(this);
     }
-    */
+    
     public EmployeeDAO getEmployeeDAO() {
         return new EmployeeDAO(this);
     }

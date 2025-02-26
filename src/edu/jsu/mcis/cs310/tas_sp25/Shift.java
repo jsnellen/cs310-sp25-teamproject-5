@@ -7,108 +7,118 @@ import java.time.format.DateTimeFormatter;
 
 public class Shift {
     
+    //Instance fields to hold shift data
     private final String description;
-    private final LocalTime shiftstart, shiftstop, lunchstart, lunchstop;
-    private final int id, roundinterval, graceperiod, dockpenalty, lunchthreshold, lunchduration, shiftduration;
     
-    // Constructor accepting a HashMap
-    public Shift(Map<String, String> shiftDetails) {
-        this.id = parseInt(shiftDetails.get("id"));
-        this.description = shiftDetails.getOrDefault("description", "");
-        this.shiftstart = parseTime(shiftDetails.get("shiftstart"));
-        this.shiftstop = parseTime(shiftDetails.get("shiftstop"));
-        this.roundinterval = parseInt(shiftDetails.get("roundinterval"));
-        this.graceperiod = parseInt(shiftDetails.get("graceperiod"));
-        this.dockpenalty = parseInt(shiftDetails.get("dockpenalty"));
-        this.lunchstart = parseTime(shiftDetails.get("lunchstart"));
-        this.lunchstop = parseTime(shiftDetails.get("lunchstop"));
-        this.lunchthreshold = parseInt(shiftDetails.get("lunchthreshold"));
-        this.lunchduration = parseTimeToMinutes(shiftDetails.get("lunchduration"));
-        this.shiftduration = parseTimeToMinutes(shiftDetails.get("shiftduration"));
-    }
+    private Integer id;
+    private LocalTime shiftstart;
+    private LocalTime shiftstop;
+    private Integer roundinterval;
+    private Integer graceperiod;
+    private Integer dockpenalty;
+    private LocalTime lunchstart;
+    private LocalTime lunchstop;
+    private Integer lunchthreshold;
+    private Duration lunchduration;
+    private Duration shiftduration;
+
     
-    // Helper method to parse integer values safely
-    private int parseInt(String value) {
-    if (value == null || value.isEmpty()) {
-        return 0;
+    // Constructor that takes a HashMap to initialize all fields
+    public Shift(HashMap<String, String> ShiftDetail) {
+        
+        // Parsing and assigning values from the HashMap
+        this.id = Integer.valueOf((String) ShiftDetail.get("id"));
+        this.description = (String) ShiftDetail.get("description");
+        this.shiftstart = LocalTime.parse((String) ShiftDetail.get("shiftStart"));
+        this.shiftstop = LocalTime.parse((String) ShiftDetail.get("shiftStop"));
+        this.roundinterval = Integer.valueOf((String) ShiftDetail.get("roundInterval"));
+        this.graceperiod = Integer.valueOf((String) ShiftDetail.get("gracePeriod"));
+        this.dockpenalty = Integer.valueOf((String) ShiftDetail.get("dockPenalty"));
+        this.lunchstart = LocalTime.parse((String) ShiftDetail.get("lunchStart"));
+        this.lunchstop = LocalTime.parse((String) ShiftDetail.get("lunchStop"));
+        this.lunchthreshold = Integer.valueOf((String) ShiftDetail.get("lunchThreshold"));
+        // The lunch duration is calculated by finding the difference between the lunch start and stop times
+        this.lunchduration = Duration.between(lunchstart,lunchstop); 
+        
+        // Check for time duration between differant dates
+        if (Duration.between(shiftstart,shiftstop).isNegative()) {
+            
+            this.shiftduration = Duration.between(shiftstart,shiftstop).plusDays(1);
+            
+        } else { 
+            
+            this.shiftduration = Duration.between(shiftstart,shiftstop);
+            
+        } 
+        
     }
-    try {
-        return Integer.parseInt(value);
-    } catch (NumberFormatException e) {
-        return 0; // Default value in case of invalid input
-    }
-    }
-    
-    // Helper method to parse time values safely
-    private LocalTime parseTime(String time) {
-        if (time == null || time.isEmpty()) {
-            return null;
+
+        // Getters methods
+
+        public Integer getId() {
+            return id;
         }
-        try {
-            return LocalTime.parse(time);
-        } catch (DateTimeParseException e) {
-            return null; // Handle invalid time formats
+
+        public String getDescription() {
+            return description;
         }
-    }
-    
-    // Helper method to parse time values and convert to minutes
-    private int parseTimeToMinutes(String time) {
-        if (time == null || time.isEmpty()) {
-            return 0; // Default value for missing time
+
+        public LocalTime getShiftStart() {
+            return shiftstart;
         }
-        try {
-            LocalTime parsedTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
-            return parsedTime.getHour() * 60 + parsedTime.getMinute();
-        } catch (DateTimeParseException e) {
-            return 0; // Default to 0 if parsing fails
+
+        public LocalTime getShiftStop() {
+            return shiftstop;
         }
-    }
 
-    public int getId() {
-        return id;
-    }
+        public Integer getRoundInterval() {
+            return roundinterval;
+        }
 
-    public String getDescription() {
-        return description;
-    }
+        public Integer getGracePeriod() {
+            return graceperiod;
+        }
 
-    public LocalTime getShiftStart() {
-        return shiftstart;
-    }
-
-    public LocalTime getShiftStop() {
-        return shiftstop;
-    }
-
-    public int getRoundInterval() {
-        return roundinterval;
-    }
-
-    public int getGracePeriod() {
-        return graceperiod;
-    }
-
-    public int getDockPenalty() {
+        public Integer getDockPenalty() {
         return dockpenalty;
-    }
+        }
 
-    public LocalTime getLunchStart() {
-        return lunchstart;
-    }
+        public LocalTime getLunchStart() {
+            return lunchstart;
+        }
 
-    public LocalTime getLunchStop() {
-        return lunchstop;
-    }
+        public LocalTime getLunchStop() {
+            return lunchstop;
+        }
 
-    public int getLunchThreshold() {
-        return lunchthreshold;
-    }
+        public Integer getLunchThreshold() {
+            return lunchthreshold;
+        }
+
+        public Duration getLunchDuration() {
+            return lunchduration;
+        }
     
-    public int getLunchDuration() {
-        return lunchduration;
-    }
-    
-    public int getShiftDuration() {
-        return shiftduration;
+        public Duration getShiftDuration() {
+            return shiftduration;
+        }
+
+        // Override the toString() method to display shift details
+        @Override
+        public String toString() {
+        StringBuilder build = new StringBuilder();
+           
+        // Append shift details to the StringBuilder
+        build.append(description).append(": ")
+               .append(shiftstart).append(" - ")
+               .append(shiftstop).append(" (")
+               .append(shiftduration.toMinutes()).append(" minutes); Lunch: ")
+               .append(lunchstart).append(" - ")
+               .append(lunchstop).append(" (")
+               .append(lunchduration.toMinutes()).append(" minutes)");
+
+
+        return build.toString();
+
     }
 }
