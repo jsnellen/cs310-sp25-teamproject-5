@@ -2,8 +2,6 @@ package edu.jsu.mcis.cs310.tas_sp25;
 
 import java.util.*;
 import java.time.*;
-import java.time.format.DateTimeParseException;
-import java.time.format.DateTimeFormatter;
 
 public class Shift {
     
@@ -37,7 +35,7 @@ public class Shift {
         this.lunchstart = LocalTime.parse((String) ShiftDetail.get("lunchStart"));
         this.lunchstop = LocalTime.parse((String) ShiftDetail.get("lunchStop"));
         this.lunchthreshold = Integer.valueOf((String) ShiftDetail.get("lunchThreshold"));
-        // The lunch duration is calculated by finding the difference between the lunch start and stop times
+        
         this.lunchduration = Duration.between(lunchstart,lunchstop); 
         
         // Check for time duration between differant dates
