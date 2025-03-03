@@ -46,7 +46,7 @@ public class Main {
         /// 
         EmployeeDAO employeeDAO = daoFactory.getEmployeeDAO();
         
-        Employee e = employeeDAO.find(1);
+        Employee e = employeeDAO.find(14);
         System.err.println("Test Employee: " + e.toString());
     }
 
