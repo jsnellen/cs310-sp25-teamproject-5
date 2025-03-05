@@ -4,6 +4,7 @@ import edu.jsu.mcis.cs310.tas_sp25.*;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PunchDAO {
 
@@ -46,11 +47,15 @@ public class PunchDAO {
 
                     while (rs.next()) {
 
-                        int terminalid = rs.getInt("terminalid");
-                        String badgeid = rs.getString("badgeid");
-                        String timestamp = rs.getString("timestamp");
-                        int eventtypeid = rs.getInt("eventtypeid");
-                        punch = new Punch(id, terminalid, badgeid, timestamp, eventtypeid);
+                        HashMap<String, String> PunchDetail = new HashMap<>();
+
+                        PunchDetail.put("id", rs.getString("id"));
+                        PunchDetail.put("terminalid", rs.getString("terminalid"));
+                        PunchDetail.put("badgeid", rs.getString("badgeid"));
+                        PunchDetail.put("timestamp", rs.getString("timestamp"));
+                        PunchDetail.put("eventtypeid", rs.getString("eventtypeid"));
+
+                        punch = new Punch (PunchDetail);
 
                     }
 
@@ -123,12 +128,15 @@ public class PunchDAO {
 
                     while (rs.next()) {
 
-                        int id = rs.getInt("id");
-                        int terminalid = rs.getInt("terminalid");
-                        String b1 = rs.getString("badgeid");
-                        String ts1 = rs.getString("timestamp");
-                        int eventtypeid = rs.getInt("eventtypeid");
-                        punch = new Punch(id, terminalid, b1, ts1, eventtypeid);
+                        HashMap<String, String> PunchDetail = new HashMap<>();
+
+                        PunchDetail.put("id", rs.getString("id"));
+                        PunchDetail.put("terminalid", rs.getString("terminalid"));
+                        PunchDetail.put("badgeid", rs.getString("badgeid"));
+                        PunchDetail.put("timestamp", rs.getString("timestamp"));
+                        PunchDetail.put("eventtypeid", rs.getString("eventtypeid"));
+
+                        punch = new Punch (PunchDetail);
 
                         System.err.println("AAAAAAA");
 

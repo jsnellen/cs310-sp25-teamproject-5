@@ -2,19 +2,21 @@ package edu.jsu.mcis.cs310.tas_sp25;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 public class Punch {
 
     private final int id, terminalid, eventtypeid;
     private final String badgeid, timestamp;
 
-    public Punch(int id, int terminalid, String badgeid, String timestamp, int eventtypeid) {
-        this.id = id;
-        this.terminalid = terminalid;
-        this.badgeid = badgeid;
-        this.timestamp = timestamp;
-        this.eventtypeid = eventtypeid;
+    public Punch(HashMap<String, String> PunchDetail) {
+        this.id = Integer.valueOf((String) PunchDetail.get("id"));
+        this.terminalid = Integer.valueOf((String) PunchDetail.get("terminalid"));
+        this.badgeid = (String) PunchDetail.get("badgeid");
+        this.timestamp = (String) PunchDetail.get("timestamp");
+        this.eventtypeid = Integer.valueOf((String) PunchDetail.get("eventtypeid"));
     }
+
 
     public int getId() {
         return id;

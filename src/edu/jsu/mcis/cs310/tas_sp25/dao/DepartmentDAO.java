@@ -1,6 +1,7 @@
 package edu.jsu.mcis.cs310.tas_sp25.dao;
 import edu.jsu.mcis.cs310.tas_sp25.*;
 import java.sql.*;
+import java.util.HashMap;
 
 public class DepartmentDAO {
 
@@ -35,10 +36,13 @@ public class DepartmentDAO {
 
                     if (rs.next()) {
 
-                        String description = rs.getString("description");
-                        int terminalid = rs.getInt("terminalid");
+                        HashMap<String, String> DepartmentDetail = new HashMap<>(); 
 
-                        department = new Department(id, description, terminalid);
+                        DepartmentDetail.put("id", rs.getString("id"));
+                        DepartmentDetail.put("description", rs.getString("description"));
+                        DepartmentDetail.put("terminalid", rs.getString("terminalid"));
+                        
+                        department = new Department (DepartmentDetail);
                     }
 
                 }
