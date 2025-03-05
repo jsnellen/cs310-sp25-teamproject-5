@@ -2,23 +2,26 @@ package edu.jsu.mcis.cs310.tas_sp25;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 public class Employee {
 
     private final int id, employeeTypeId, departmentId, shiftId;
     private final String badgeId, firstName, middleName, lastName, active, inactive;
 
-    public Employee(int id, String badgeId, String firstName, String middleName, String lastName, int employeeTypeId, int departmentId, int shiftId, String active, String inactive) {
-        this.id = id;
-        this.employeeTypeId = employeeTypeId;
-        this.departmentId = departmentId;
-        this.shiftId = shiftId;
-        this.badgeId = badgeId;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.active = active;
-        this.inactive = inactive;
+    public Employee(HashMap<String, String> EmployeeDetail) {
+
+        this.id = Integer.valueOf((String) EmployeeDetail.get("id"));;
+        this.employeeTypeId = Integer.valueOf((String) EmployeeDetail.get("employeeTypeId"));
+        this.departmentId = Integer.valueOf((String) EmployeeDetail.get("departmentId"));
+        this.shiftId = Integer.valueOf((String) EmployeeDetail.get("shiftId"));
+        this.badgeId = (String) EmployeeDetail.get("badgeId");
+        this.firstName = (String) EmployeeDetail.get("firstName");
+        this.middleName = (String) EmployeeDetail.get("middleName");
+        this.lastName = (String) EmployeeDetail.get("lastName");
+        this.active = (String) EmployeeDetail.get("active");
+        this.inactive = (String) EmployeeDetail.get("inactive");
+
     }
 
     public int getId() {

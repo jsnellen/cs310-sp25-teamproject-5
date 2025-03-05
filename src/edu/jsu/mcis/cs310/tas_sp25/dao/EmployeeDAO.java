@@ -2,6 +2,7 @@ package edu.jsu.mcis.cs310.tas_sp25.dao;
 
 import edu.jsu.mcis.cs310.tas_sp25.*;
 import java.sql.*;
+import java.util.HashMap;
 
 public class EmployeeDAO {
 
@@ -40,6 +41,7 @@ public class EmployeeDAO {
 
                     while (rs.next()) {
 
+                        /* 
                         String badgeId = rs.getString("badgeid");
                         String firstName = rs.getString("firstname");
                         String middleName = rs.getString("middlename");
@@ -50,6 +52,22 @@ public class EmployeeDAO {
                         String active = rs.getString("active");
                         String inactive = rs.getString("inactive");
                         employee = new Employee(id, badgeId, firstName, middleName, lastName, employeeTypeId, departmentId, shiftId, active, inactive);
+                        */
+
+                        HashMap<String, String> EmployeeDetail = new HashMap<>();
+                        EmployeeDetail.put("id", rs.getString("id"));
+                        EmployeeDetail.put("badgeId", rs.getString("badgeid"));
+                        EmployeeDetail.put("firstName", rs.getString("firstname"));
+                        EmployeeDetail.put("middleName", rs.getString("middlename"));
+                        EmployeeDetail.put("lastName", rs.getString("lastname"));
+                        EmployeeDetail.put("employeeTypeId", rs.getString("employeetypeid"));
+                        EmployeeDetail.put("departmentId", rs.getString("departmentid"));
+                        EmployeeDetail.put("shiftId", rs.getString("shiftid"));
+                        EmployeeDetail.put("active", rs.getString("active"));
+                        EmployeeDetail.put("inactive", rs.getString("inactive"));
+                        
+                        // Create a Shift object using the extracted data
+                        employee = new Employee (EmployeeDetail);
 
                     }
 
@@ -110,18 +128,21 @@ public class EmployeeDAO {
 
                     while (rs.next()) {
 
-                        int id = rs.getInt("id");
-                        String badgeId = rs.getString("badgeid");
-                        String firstName = rs.getString("firstname");
-                        String middleName = rs.getString("middlename");
-                        String lastName = rs.getString("lastName");
-                        int employeeTypeId = rs.getInt("employeetypeid");
-                        int departmentId = rs.getInt("departmentid");
-                        int shiftId = rs.getInt("shiftId");
-                        String active = rs.getString("active");
-                        String inactive = rs.getString("inactive");
-                        employee = new Employee(id, badgeId, firstName, middleName, lastName, employeeTypeId, departmentId, shiftId, active, inactive);
-
+                        HashMap<String, String> EmployeeDetail = new HashMap<>();
+                        EmployeeDetail.put("id", rs.getString("id"));
+                        EmployeeDetail.put("badgeId", rs.getString("badgeid"));
+                        EmployeeDetail.put("firstName", rs.getString("firstname"));
+                        EmployeeDetail.put("middleName", rs.getString("middlename"));
+                        EmployeeDetail.put("lastName", rs.getString("lastname"));
+                        EmployeeDetail.put("employeeTypeId", rs.getString("employeetypeid"));
+                        EmployeeDetail.put("departmentId", rs.getString("departmentid"));
+                        EmployeeDetail.put("shiftId", rs.getString("shiftid"));
+                        EmployeeDetail.put("active", rs.getString("active"));
+                        EmployeeDetail.put("inactive", rs.getString("inactive"));
+                        
+                        // Create a Shift object using the extracted data
+                        employee = new Employee (EmployeeDetail);
+                        
                     }
 
                 }
