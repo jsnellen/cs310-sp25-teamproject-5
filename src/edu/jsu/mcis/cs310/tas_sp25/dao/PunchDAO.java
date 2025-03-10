@@ -176,5 +176,21 @@ public class PunchDAO {
 
     }
 
+
+    public void create(Punch p1) {
+        
+        HashMap<String, String> PunchDetail = new HashMap<>();
+
+        PunchDetail.put("terminalid", );
+        PunchDetail.put("badgeid", );
+        PunchDetail.put("timestamp", );
+        PunchDetail.put("eventtypeid", );
+
+        punch = new Punch (PunchDetail);
+
+
+
+    }
+
 }
 

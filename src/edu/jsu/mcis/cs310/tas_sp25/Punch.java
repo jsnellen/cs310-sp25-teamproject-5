@@ -1,5 +1,7 @@
 package edu.jsu.mcis.cs310.tas_sp25;
 
+import edu.jsu.mcis.cs310.tas_sp25.dao.BadgeDAO;
+import edu.jsu.mcis.cs310.tas_sp25.dao.DAOFactory;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -8,13 +10,43 @@ public class Punch {
 
     private final int id, terminalid, eventtypeid;
     private final String badgeid, timestamp;
+    private final Badge badge;
+    private final EventType eventtype;
 
     public Punch(HashMap<String, String> PunchDetail) {
+
+        DAOFactory daoFactory = new DAOFactory("tas.jdbc");
+        BadgeDAO badgeDAO = daoFactory.getBadgeDAO();
+
         this.id = Integer.valueOf((String) PunchDetail.get("id"));
         this.terminalid = Integer.valueOf((String) PunchDetail.get("terminalid"));
         this.badgeid = (String) PunchDetail.get("badgeid");
         this.timestamp = (String) PunchDetail.get("timestamp");
         this.eventtypeid = Integer.valueOf((String) PunchDetail.get("eventtypeid"));
+        this.badge = badgeDAO.find(badgeid);
+
+        
+        switch(eventtypeid) {
+            case 0 -> this.eventtype = EventType.CLOCK_OUT;
+            case 1 -> this.eventtype = EventType.CLOCK_IN;
+            case 2 -> this.eventtype = EventType.TIME_OUT;
+            default -> {
+                this.eventtype = EventType.CLOCK_OUT;
+            }
+        }
+    }
+
+
+    public Punch(int i, Badge badge, EventType clockIn) {
+
+        this.id = 0;
+        this.terminalid = i;
+        this.badge = badge;
+        this.eventtypeid = clockIn.ordinal();
+        this.badgeid = badge.getId();
+        this.timestamp = null;
+        this.eventtype = clockIn;
+
     }
 
 
@@ -22,7 +54,7 @@ public class Punch {
         return id;
     }
 
-    public int getTerminalId() {
+    public int getTerminalid() {
         return terminalid;
     }
 
@@ -30,12 +62,25 @@ public class Punch {
         return badgeid;
     }
 
+    public Badge getBadge() {
+        return badge;
+    }
+
     public String getTimestamp() {
         return timestamp;
     }
 
+    public LocalDateTime getOriginaltimestamp() {
+        LocalDateTime ots = LocalDateTime.parse(timestamp);
+        return ots;
+    }
+
     public int getEventTypeId() {
         return eventtypeid;
+    }
+
+    public EventType getPunchtype() {
+        return eventtype;
     }
 
     @Override
@@ -91,4 +136,5 @@ public class Punch {
         return s.toString();
 
     }
+
 }
