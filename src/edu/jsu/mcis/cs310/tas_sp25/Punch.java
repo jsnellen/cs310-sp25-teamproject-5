@@ -85,28 +85,6 @@ public class Punch {
         return eventtype;
     }
 
-    @Override
-    public String toString() {
-
-        StringBuilder s = new StringBuilder();
-
-        String dateTimeString = timestamp;
-        // Define the desired format
-        DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MM/dd/YYYY HH:mm:ss");
-
-        // Format LocalDateTime using the defined formatter
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, start);
-        String formattedDateTime = dateTime.format(formatter);
-
-        s.append('#').append(badgeid).append(' ');
-        s.append("CLOCK IN: ");
-        s.append(formattedDateTime);
-
-        return s.toString();
-
-    }
-
     public String printOriginal() {
 
         StringBuilder s = new StringBuilder();
@@ -114,13 +92,12 @@ public class Punch {
         String badgeid = this.getBadgeId();
         int eventtypeid = this.getEventTypeId();
 
-        String dateTimeString = timestamp;
         // Define the desired format
         DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE MM/dd/yyyy HH:mm:ss");
 
         // Format LocalDateTime using the defined formatter
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, start);
+        LocalDateTime dateTime = LocalDateTime.parse(timestamp, start);
         String formattedDateTime = dateTime.format(formatter).toUpperCase();
 
         s.append('#').append(badgeid).append(' ');

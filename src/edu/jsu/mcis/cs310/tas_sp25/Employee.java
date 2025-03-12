@@ -28,6 +28,10 @@ public class Employee {
         return id;
     }
 
+    public int getDepartment() {
+        return departmentId;
+    }
+
 
     @Override
     public String toString() {
