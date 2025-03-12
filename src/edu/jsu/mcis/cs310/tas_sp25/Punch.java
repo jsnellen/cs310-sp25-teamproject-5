@@ -2,11 +2,11 @@ package edu.jsu.mcis.cs310.tas_sp25;
 
 import edu.jsu.mcis.cs310.tas_sp25.dao.BadgeDAO;
 import edu.jsu.mcis.cs310.tas_sp25.dao.DAOFactory;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.time.LocalTime;
-import java.time.DayOfWeek;
 
 public class Punch {
 
@@ -30,7 +30,8 @@ public class Punch {
         this.timestamp = (String) PunchDetail.get("timestamp");
         this.eventtypeid = Integer.valueOf((String) PunchDetail.get("eventtypeid"));
         this.badge = badgeDAO.find(badgeid);
-        this.ots = LocalDateTime.now();
+        DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.ots = LocalDateTime.parse(PunchDetail.get("timestamp"), start);
 
         
         switch(eventtypeid) {
@@ -226,13 +227,12 @@ public class Punch {
         String badgeid = this.getBadgeId();
         int eventtypeid = this.getEventTypeId();
 
-        String dateTimeString = timestamp;
         // Define the desired format
         DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EE MM/dd/yyyy HH:mm:ss");
 
         // Format LocalDateTime using the defined formatter
-        LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, start);
+        LocalDateTime dateTime = LocalDateTime.parse(timestamp, start);
         String formattedDateTime = dateTime.format(formatter).toUpperCase();
 
         s.append('#').append(badgeid).append(' ');
