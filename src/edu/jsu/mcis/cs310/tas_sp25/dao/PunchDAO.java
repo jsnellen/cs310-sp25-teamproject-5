@@ -194,10 +194,10 @@ public class PunchDAO {
         EmployeeDAO employeeDAO = daoFactory.getEmployeeDAO();
         DepartmentDAO departmentDAO = daoFactory.getDepartmentDAO();
 
-        Employee e = employeeDAO.find(p1.getBadge());
-        
+        //Employee e = employeeDAO.find(p1.getBadge());
 
-        if()
+
+        //if()
 
 
         try {

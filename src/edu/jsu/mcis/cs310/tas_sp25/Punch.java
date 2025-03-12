@@ -30,7 +30,8 @@ public class Punch {
         this.timestamp = (String) PunchDetail.get("timestamp");
         this.eventtypeid = Integer.valueOf((String) PunchDetail.get("eventtypeid"));
         this.badge = badgeDAO.find(badgeid);
-        this.ots = LocalDateTime.now();
+        DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.ots = LocalDateTime.parse(PunchDetail.get("timestamp"), start);
 
         
         switch(eventtypeid) {
