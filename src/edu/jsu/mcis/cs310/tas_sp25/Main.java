@@ -32,7 +32,7 @@ public class Main {
         // output should be "Test Badge: #C4F37EFF (Welch, Travis C)"
         
         System.err.println("Test Badge: " + b.toString());
-        System.err.println("Test Punch: " + p.toString());
+        //System.err.println("Test Punch: " + p.toString());
         System.err.println("Test Punch: " + p1.printOriginal());
 
         for (Punch a : p2) {
@@ -48,6 +48,21 @@ public class Main {
         
         Employee e = employeeDAO.find(14);
         System.err.println("Test Employee: " + e.toString());
+
+        ////////******* TEST CREATE PUNCH */
+        /// 
+
+        /* Create New Punch Object */
+        
+        Punch p7 = new Punch(103, badgeDAO.find("021890C0"), EventType.CLOCK_IN);
+        int punchid = punchDAO.create(p7);
+        System.err.println(punchid);
+
+        Punch p8 = punchDAO.find(punchid);
+        System.err.println(p8.getBadge().getId());
+
+        //System.err.println(p7.printOriginal());
+        System.err.println(p8.printOriginal());
     }
 
 }

@@ -10,6 +10,8 @@ public class PunchDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM event WHERE id = ?";
     private static final String QUERY_LIST = "SELECT * from event WHERE badgeid = ? AND DATE(timestamp) = ?";
+    private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, eventtypeid) VALUES (?, ?, ?)";
+    private static final String QUERY_LAST = "SELECT * FROM event ORDER BY id DESC LIMIT 1";
 
     private final DAOFactory daoFactory;
 
@@ -177,20 +179,84 @@ public class PunchDAO {
     }
 
 
-    public void create(Punch p1) {
-        
-        HashMap<String, String> PunchDetail = new HashMap<>();
+    public int create(Punch p1) {
 
-        PunchDetail.put("terminalid", );
-        PunchDetail.put("badgeid", );
-        PunchDetail.put("timestamp", );
-        PunchDetail.put("eventtypeid", );
+        //Punch punch = null;
 
-        punch = new Punch (PunchDetail);
+        PreparedStatement ps = null;
+        PreparedStatement ps1 = null;
+        ResultSet rs = null;
+        int punchid = 0;
 
+        try {
 
+            Connection conn = daoFactory.getConnection();
+
+            if (conn.isValid(0)) {
+
+                ps = conn.prepareStatement(QUERY_CREATE);
+                ps.setInt(1, p1.getTerminalid());
+                ps.setString(2, p1.getBadgeId());
+                ps.setInt(3, p1.getEventTypeId());
+
+                //System.err.println(ps.toString());
+
+                ps.executeUpdate();
+
+                ps1 = conn.prepareStatement(QUERY_LAST);
+
+                boolean hasresults = ps1.execute();
+
+                if (hasresults) {
+
+                    rs = ps1.getResultSet();
+
+                    while (rs.next()) {
+
+                        punchid = rs.getInt("id");
+                        
+                    }
+
+                }
+
+            }
+
+        } catch (SQLException e) {
+
+            throw new DAOException(e.getMessage());
+
+        } finally {
+
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
+                }
+            }
+
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
+                }
+            }
+
+            if (ps1 != null) {
+                try {
+                    ps1.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
+                }
+            }
+
+        }
+
+        return punchid;
 
     }
+        
 
 }
 

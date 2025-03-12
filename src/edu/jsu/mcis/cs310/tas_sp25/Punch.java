@@ -10,6 +10,7 @@ public class Punch {
 
     private final int id, terminalid, eventtypeid;
     private final String badgeid, timestamp;
+    private final LocalDateTime ots;
     private final Badge badge;
     private final EventType eventtype;
 
@@ -24,6 +25,7 @@ public class Punch {
         this.timestamp = (String) PunchDetail.get("timestamp");
         this.eventtypeid = Integer.valueOf((String) PunchDetail.get("eventtypeid"));
         this.badge = badgeDAO.find(badgeid);
+        this.ots = LocalDateTime.now();
 
         
         switch(eventtypeid) {
@@ -45,6 +47,7 @@ public class Punch {
         this.eventtypeid = clockIn.ordinal();
         this.badgeid = badge.getId();
         this.timestamp = null;
+        this.ots = LocalDateTime.now();
         this.eventtype = clockIn;
 
     }
@@ -71,7 +74,6 @@ public class Punch {
     }
 
     public LocalDateTime getOriginaltimestamp() {
-        LocalDateTime ots = LocalDateTime.parse(timestamp);
         return ots;
     }
 
