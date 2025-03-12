@@ -16,7 +16,7 @@ import edu.jsu.mcis.cs310.tas_sp25.Punch;
  */
 public final class DAOUtility {
     
-    public static String getPunchListAsJson(ArrayList<Punch> dailypunchlist) {
+    public static String getPunchListAsJSON(ArrayList<Punch> dailypunchlist) {
    
         // Create an ArrayList for the punch data
         ArrayList<HashMap<String, String>> jsonData = new ArrayList<>();
@@ -27,10 +27,10 @@ public final class DAOUtility {
        
             // Add the punch data to the Hashmap
             punchData.put("id", String.valueOf(punch.getId()));
-            punchData.put("badgeid", punch.getBadgeid());
+            punchData.put("badgeid", punch.getBadgeId());
             punchData.put("terminalid", String.valueOf(punch.getTerminalid()));
             punchData.put("punchtype", punch.getPunchtype().toString());
-            punchData.put("adjustmenttype", punch.getAdjustmenttype().toString());
+            punchData.put("adjustmenttype", punch.getAdjustmentType().toString());
             punchData.put("originaltimestamp", punch.printOriginal());
             punchData.put("adjustedtimestamp", punch.printAdjusted());
        
