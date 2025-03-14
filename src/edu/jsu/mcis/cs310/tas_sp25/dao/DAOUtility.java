@@ -31,8 +31,9 @@ public final class DAOUtility {
             punchData.put("terminalid", String.valueOf(punch.getTerminalid()));
             punchData.put("punchtype", punch.getPunchtype().toString());
             punchData.put("adjustmenttype", punch.getAdjustmentType().toString());
-            punchData.put("originaltimestamp", punch.printOriginal());
-            punchData.put("adjustedtimestamp", punch.printAdjusted());
+
+            punchData.put("originaltimestamp", punch.toString());
+            punchData.put("adjustedtimestamp", punch.adjustedToString());
        
             // Append the HashMap to the ArrayList
             jsonData.add(punchData);

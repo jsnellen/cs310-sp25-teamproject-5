@@ -9,10 +9,10 @@ import java.util.HashMap;
 public class PunchDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM event WHERE id = ?";
-    private static final String QUERY_LIST = "SELECT * from event WHERE badgeid = ? AND DATE(timestamp) = ?";
+    private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ? AND DATE(timestamp) = ?";
     private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, eventtypeid) VALUES (?, ?, ?)";
     private static final String QUERY_LAST = "SELECT * FROM event ORDER BY id DESC LIMIT 1";
-    private static final String QUERY_LIST_RANGE = "";
+    private static final String QUERY_LIST_RANGE = "SELECT * FROM event WHERE badgeid = ? AND DATE(timestamp) > ? AND DATE(timestamp) < ?";
 
     private final DAOFactory daoFactory;
 

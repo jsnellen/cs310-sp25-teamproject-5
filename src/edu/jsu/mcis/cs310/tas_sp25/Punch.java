@@ -212,11 +212,11 @@ public class Punch {
         LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, start);
         String formattedDateTime = dateTime.format(formatter);
 
-        s.append('#').append(badgeid).append(' ');
-        s.append("CLOCK IN: ");
+        //s.append('#').append(badgeid).append(' ');
+        //s.append("CLOCK IN: ");
         s.append(formattedDateTime);
 
-        return s.toString();
+        return s.toString().toUpperCase();
 
     }
 
@@ -236,7 +236,7 @@ public class Punch {
         String formattedDateTime = dateTime.format(formatter).toUpperCase();
         
         //This code needed to be commented out. We don't have to built this manually, the info we neeeded is already provided. (Ralph) 
-        /*
+        
         s.append('#').append(badgeid).append(' ');
 
         if (eventtypeid == 1) {
@@ -246,12 +246,13 @@ public class Punch {
         } else {
             s.append("TIME OUT: ");
         }
-        */
+        
         s.append(formattedDateTime);
 
         return s.toString();
 
     }
+
     public String printAdjusted() {
     StringBuilder build = new StringBuilder();
 
@@ -264,7 +265,7 @@ public class Punch {
     // Build the adjusted punch string
     
     // Same issue here as in printOriginal(). I removed the unnecessary appends. (Ralph)
-    /*
+    
     build.append("#")
          .append(badge.getId()).append(" ")
          .append(eventtype).append(": ") 
@@ -272,13 +273,35 @@ public class Punch {
          .append(" ")
          .append(adjustedtimestamp.format(format)) 
          .append(" (").append(adjustmenttype).append(")");
-    */
+    /* 
       build
          .append(dayOfTheWeek.name().substring(0, 3))
          .append(" ")
          .append(adjustedtimestamp.format(format));
+       */  
     return build.toString();
     }
+    public String adjustedToString() {
+        StringBuilder build = new StringBuilder();
+    
+        // Define the date and time format
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+    
+        // Get the day of the week from the original timestamp
+        DayOfWeek dayOfTheWeek = getOriginaltimestamp().getDayOfWeek();
+    
+        // Build the adjusted punch string
+        
+        // Same issue here as in printOriginal(). I removed the unnecessary appends. (Ralph)
+        
+        
+          build
+             .append(dayOfTheWeek.name().substring(0, 3))
+             .append(" ")
+             .append(adjustedtimestamp.format(format));
+             
+        return build.toString();
+        }
 }
     
 
