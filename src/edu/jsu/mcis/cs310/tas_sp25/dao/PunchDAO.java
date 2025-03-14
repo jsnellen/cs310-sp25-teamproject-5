@@ -188,6 +188,8 @@ public class PunchDAO {
         ResultSet rs = null;
         int punchid = 0;
 
+        
+        //What the hell is this stuff? lol (Ralph)
 <<<<<<< HEAD
         try {
 =======
