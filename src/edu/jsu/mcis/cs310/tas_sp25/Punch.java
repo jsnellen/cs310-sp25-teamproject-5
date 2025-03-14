@@ -234,7 +234,9 @@ public class Punch {
         // Format LocalDateTime using the defined formatter
         LocalDateTime dateTime = LocalDateTime.parse(timestamp, start);
         String formattedDateTime = dateTime.format(formatter).toUpperCase();
-
+        
+        //This code needed to be commented out. We don't have to built this manually, the info we neeeded is already provided. (Ralph) 
+        /*
         s.append('#').append(badgeid).append(' ');
 
         if (eventtypeid == 1) {
@@ -244,7 +246,7 @@ public class Punch {
         } else {
             s.append("TIME OUT: ");
         }
-        
+        */
         s.append(formattedDateTime);
 
         return s.toString();
@@ -260,6 +262,9 @@ public class Punch {
     DayOfWeek dayOfTheWeek = getOriginaltimestamp().getDayOfWeek();
 
     // Build the adjusted punch string
+    
+    // Same issue here as in printOriginal(). I removed the unnecessary appends. (Ralph)
+    /*
     build.append("#")
          .append(badge.getId()).append(" ")
          .append(eventtype).append(": ") 
@@ -267,7 +272,11 @@ public class Punch {
          .append(" ")
          .append(adjustedtimestamp.format(format)) 
          .append(" (").append(adjustmenttype).append(")");
-
+    */
+      build
+         .append(dayOfTheWeek.name().substring(0, 3))
+         .append(" ")
+         .append(adjustedtimestamp.format(format));
     return build.toString();
     }
 }

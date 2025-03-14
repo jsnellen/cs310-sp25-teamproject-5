@@ -12,7 +12,6 @@ public class PunchDAO {
     private static final String QUERY_LIST = "SELECT * from event WHERE badgeid = ? AND DATE(timestamp) = ?";
     private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, eventtypeid) VALUES (?, ?, ?)";
     private static final String QUERY_LAST = "SELECT * FROM event ORDER BY id DESC LIMIT 1";
-    private static final String QUERY_ = "";
 
     private final DAOFactory daoFactory;
 
@@ -189,17 +188,6 @@ public class PunchDAO {
         ResultSet rs = null;
         int punchid = 0;
 
-        DAOFactory daoFactory = new DAOFactory("tas.jdbc");
-        BadgeDAO badgeDAO = daoFactory.getBadgeDAO();
-        EmployeeDAO employeeDAO = daoFactory.getEmployeeDAO();
-        DepartmentDAO departmentDAO = daoFactory.getDepartmentDAO();
-
-        //Employee e = employeeDAO.find(p1.getBadge());
-
-
-        //if()
-
-
         try {
 
             Connection conn = daoFactory.getConnection();
@@ -226,7 +214,7 @@ public class PunchDAO {
                     while (rs.next()) {
 
                         punchid = rs.getInt("id");
-
+                        
                     }
 
                 }
