@@ -188,68 +188,99 @@ public class PunchDAO {
         ResultSet rs = null;
         int punchid = 0;
 
+<<<<<<< HEAD
         try {
+=======
+        DAOFactory daoFactory = new DAOFactory("tas.jdbc");
+        //BadgeDAO badgeDAO = daoFactory.getBadgeDAO();
+        EmployeeDAO employeeDAO = daoFactory.getEmployeeDAO();
+        DepartmentDAO departmentDAO = daoFactory.getDepartmentDAO();
 
-            Connection conn = daoFactory.getConnection();
+        Employee e1 = employeeDAO.find(p1.getBadge());
+        Department d1 = departmentDAO.find(e1.getDepartment());
 
-            if (conn.isValid(0)) {
 
-                ps = conn.prepareStatement(QUERY_CREATE);
-                ps.setInt(1, p1.getTerminalid());
-                ps.setString(2, p1.getBadgeId());
-                ps.setInt(3, p1.getEventTypeId());
+        if((p1.getTerminalid() == d1.getTerminalid()) || (p1.getTerminalid() == 0)) {
 
-                //System.err.println(ps.toString());
+            System.err.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
-                ps.executeUpdate();
+        
 
-                ps1 = conn.prepareStatement(QUERY_LAST);
 
-                boolean hasresults = ps1.execute();
+            try {
+>>>>>>> 82e56bceac705cd41fcd5f94160c4fdf9e90cbb6
 
-                if (hasresults) {
+                Connection conn = daoFactory.getConnection();
 
-                    rs = ps1.getResultSet();
+                if (conn.isValid(0)) {
 
-                    while (rs.next()) {
+                    ps = conn.prepareStatement(QUERY_CREATE);
+                    ps.setInt(1, p1.getTerminalid());
+                    ps.setString(2, p1.getBadgeId());
+                    ps.setInt(3, p1.getEventTypeId());
 
+                    //System.err.println(ps.toString());
+
+                    ps.executeUpdate();
+
+                    ps1 = conn.prepareStatement(QUERY_LAST);
+
+                    boolean hasresults = ps1.execute();
+
+                    if (hasresults) {
+
+                        rs = ps1.getResultSet();
+
+                        while (rs.next()) {
+
+<<<<<<< HEAD
                         punchid = rs.getInt("id");
                         
+=======
+                            punchid = rs.getInt("id");
+
+                        }
+
+>>>>>>> 82e56bceac705cd41fcd5f94160c4fdf9e90cbb6
                     }
 
                 }
 
-            }
+            } catch (SQLException e) {
 
-        } catch (SQLException e) {
+                throw new DAOException(e.getMessage());
 
-            throw new DAOException(e.getMessage());
+            } finally {
 
-        } finally {
-
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
+                if (rs != null) {
+                    try {
+                        rs.close();
+                    } catch (SQLException e) {
+                        throw new DAOException(e.getMessage());
+                    }
                 }
+
+                if (ps != null) {
+                    try {
+                        ps.close();
+                    } catch (SQLException e) {
+                        throw new DAOException(e.getMessage());
+                    }
+                }
+
+                if (ps1 != null) {
+                    try {
+                        ps1.close();
+                    } catch (SQLException e) {
+                        throw new DAOException(e.getMessage());
+                    }
+                }
+
             }
 
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
-            }
+                //return punchid;
 
-            if (ps1 != null) {
-                try {
-                    ps1.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
-            }
+            
 
         }
 
