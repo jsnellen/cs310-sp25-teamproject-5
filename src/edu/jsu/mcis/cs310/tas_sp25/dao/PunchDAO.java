@@ -12,7 +12,7 @@ public class PunchDAO {
     private static final String QUERY_LIST = "SELECT * FROM event WHERE badgeid = ? AND DATE(timestamp) = ?";
     private static final String QUERY_CREATE = "INSERT INTO event (terminalid, badgeid, eventtypeid) VALUES (?, ?, ?)";
     private static final String QUERY_LAST = "SELECT * FROM event ORDER BY id DESC LIMIT 1";
-    private static final String QUERY_LIST_RANGE = "SELECT * FROM event WHERE badgeid = ? AND DATE(timestamp) > ? AND DATE(timestamp) < ?";
+    //private static final String QUERY_LIST_RANGE = "SELECT * FROM event WHERE badgeid = ? AND DATE(timestamp) >= ? AND DATE(timestamp) <= ?";
 
     private final DAOFactory daoFactory;
 
@@ -178,6 +178,20 @@ public class PunchDAO {
         return p1;
 
     }
+    
+
+
+    public ArrayList<Punch> list(Badge badgeid, LocalDate timestamp, LocalDate timestamp1) {
+
+        ArrayList<Punch> p1 = new ArrayList<>();
+
+        for (LocalDate date = timestamp; !date.isAfter(timestamp1); date = date.plusDays(1)) {
+            p1.addAll(this.list(badgeid, date));
+        }
+
+        return p1;
+    }
+   
 
 
     public int create(Punch p1) {
