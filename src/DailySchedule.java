@@ -1,58 +1,53 @@
 package edu.jsu.mcis.cs310.tas_sp25;
 
-import java.util.*;
 import java.time.*;
+import java.util.*;
 
-public class Shift {
+public class DailySchedule {
     
     //Instance fields to hold shift data
     private final String description;
     
     private Integer id;
-    //private LocalTime shiftstart;
-    //private LocalTime shiftstop;
-    //private Integer roundinterval;
-    //private Integer graceperiod;
-    //private Integer dockpenalty;
-    //private LocalTime lunchstart;
-    //private LocalTime lunchstop;
-    //private Integer lunchthreshold;
-    //private Duration lunchduration;
-    //private Duration shiftduration;
-    private Integer dailyScheduleId;
-
-    private DailySchedule defaultschedule = new DailySchedule;
-
+    private LocalTime shiftstart;
+    private LocalTime shiftstop;
+    private Integer roundinterval;
+    private Integer graceperiod;
+    private Integer dockpenalty;
+    private LocalTime lunchstart;
+    private LocalTime lunchstop;
+    private Integer lunchthreshold;
+    private Duration lunchduration;
+    private Duration shiftduration;
 
     
     // Constructor that takes a HashMap to initialize all fields
-    public Shift(HashMap<String, String> ShiftDetail) {
+    public DailySchedule(HashMap<String, String> DailyScheduleDetail) {
         
         // Parsing and assigning values from the HashMap
-        this.id = Integer.valueOf((String) ShiftDetail.get("id"));
-        this.description = (String) ShiftDetail.get("description");
-        this.dailyScheduleId = Integer.valueOf((String) ShiftDetail.get("dailyscheduleid"));
-        //this.shiftstart = LocalTime.parse((String) ShiftDetail.get("shiftStart"));
-        //this.shiftstop = LocalTime.parse((String) ShiftDetail.get("shiftStop"));
-        //this.roundinterval = Integer.valueOf((String) ShiftDetail.get("roundInterval"));
-        //this.graceperiod = Integer.valueOf((String) ShiftDetail.get("gracePeriod"));
-        //this.dockpenalty = Integer.valueOf((String) ShiftDetail.get("dockPenalty"));
-        //this.lunchstart = LocalTime.parse((String) ShiftDetail.get("lunchStart"));
-        //this.lunchstop = LocalTime.parse((String) ShiftDetail.get("lunchStop"));
-        //this.lunchthreshold = Integer.valueOf((String) ShiftDetail.get("lunchThreshold"));
+        this.id = Integer.valueOf((String) DailyScheduleDetail.get("id"));
+        this.description = (String) DailyScheduleDetail.get("description");
+        this.shiftstart = LocalTime.parse((String) DailyScheduleDetail.get("shiftStart"));
+        this.shiftstop = LocalTime.parse((String) DailyScheduleDetail.get("shiftStop"));
+        this.roundinterval = Integer.valueOf((String) DailyScheduleDetail.get("roundInterval"));
+        this.graceperiod = Integer.valueOf((String) DailyScheduleDetail.get("gracePeriod"));
+        this.dockpenalty = Integer.valueOf((String) DailyScheduleDetail.get("dockPenalty"));
+        this.lunchstart = LocalTime.parse((String) DailyScheduleDetail.get("lunchStart"));
+        this.lunchstop = LocalTime.parse((String) DailyScheduleDetail.get("lunchStop"));
+        this.lunchthreshold = Integer.valueOf((String) DailyScheduleDetail.get("lunchThreshold"));
         
-        //this.lunchduration = Duration.between(lunchstart,lunchstop); 
+        this.lunchduration = Duration.between(lunchstart,lunchstop); 
         
         // Check for time duration between differant dates
-        //if (Duration.between(shiftstart,shiftstop).isNegative()) {
+        if (Duration.between(shiftstart,shiftstop).isNegative()) {
             
-            //this.shiftduration = Duration.between(shiftstart,shiftstop).plusDays(1);
+            this.shiftduration = Duration.between(shiftstart,shiftstop).plusDays(1);
             
-        //} else { 
+        } else { 
             
-            //this.shiftduration = Duration.between(shiftstart,shiftstop);
+            this.shiftduration = Duration.between(shiftstart,shiftstop);
             
-        //} 
+        } 
         
     }
 
@@ -65,7 +60,7 @@ public class Shift {
         public String getDescription() {
             return description;
         }
-/* 
+
         public LocalTime getShiftStart() {
             return shiftstart;
         }
@@ -106,11 +101,7 @@ public class Shift {
             return shiftduration;
         }
 
-        */
-
         // Override the toString() method to display shift details
-
-        /* 
         @Override
         public String toString() {
         StringBuilder build = new StringBuilder();
@@ -127,5 +118,5 @@ public class Shift {
 
         return build.toString();
 
-    }*/
+    }
 }
