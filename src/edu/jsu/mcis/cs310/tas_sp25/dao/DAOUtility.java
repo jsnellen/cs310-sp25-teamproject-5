@@ -5,7 +5,10 @@ import java.util.*;
 import java.time.temporal.ChronoUnit;
 import java.time.format.DateTimeFormatter;
 import com.github.cliftonlabs.json_simple.*;
+import edu.jsu.mcis.cs310.tas_sp25.EventType;
 import edu.jsu.mcis.cs310.tas_sp25.Punch;
+import edu.jsu.mcis.cs310.tas_sp25.Shift;
+
 
 /**
  * 
@@ -47,4 +50,77 @@ public final class DAOUtility {
     
     }
 
+        public static int calculateTotalMinutes(ArrayList<Punch> dailypunchlist, Shift shift) {
+        LocalDateTime shiftStart = null;
+        LocalDateTime shiftStop = null;
+        boolean lunchDeductible = false;
+        long totalWorkedMinutes = 0;
+
+        for (Punch punch : dailypunchlist) {
+            EventType eventType = punch.getPunchtype();
+            LocalDateTime punchTimestamp = punch.getAdjustedTimestamp();
+
+            switch (eventType) {
+                case CLOCK_IN:
+                    // Set the shift start time when a clock-in punch is encountered
+                    shiftStart = punchTimestamp;
+                    // Reset shift stop time
+                    shiftStop = null; 
+                    // Reset lunch deductible
+                    lunchDeductible = false; 
+                    break;
+
+                case CLOCK_OUT:
+                    // Set the shift stop time when a clock-out punch is encountered
+                    shiftStop = punchTimestamp;
+                    break;
+
+                case TIME_OUT:
+                    // Ignore time-out punches and reset shift stop time
+                    shiftStop = null;
+                    break;
+                default:
+                    break;
+            }
+
+            // If both shift start and stop times are set, calculate the duration
+            if (shiftStart != null && shiftStop != null) {
+                long shiftDurationMinutes = Duration.between(shiftStart, shiftStop).toMinutes();
+
+                // Check if the shift duration exceeds the lunch threshold
+                if (shiftDurationMinutes > shift.getLunchThreshold()) {
+                    lunchDeductible = true;
+                }
+
+                // If the employee is clocking out and lunch is deductible, subtract lunch duration
+                if (eventType == EventType.CLOCK_OUT && lunchDeductible) {
+                    
+                    long lunchDurationMinutes = shift.getLunchDuration().toMinutes();
+                    
+                    if (shiftDurationMinutes > lunchDurationMinutes) {
+                        totalWorkedMinutes += shiftDurationMinutes - lunchDurationMinutes;
+                        
+                    } else {
+                        
+                        totalWorkedMinutes += shiftDurationMinutes;
+                    }
+                    
+                } else {
+                    
+                    totalWorkedMinutes += shiftDurationMinutes;
+                    
+                }
+
+                // Reset shift start and stop times for the next shift
+                shiftStart = null;
+                shiftStop = null;
+                lunchDeductible = false;
+            }
+        }
+
+        return (int) totalWorkedMinutes;
+    }
 }
+
+
+    
