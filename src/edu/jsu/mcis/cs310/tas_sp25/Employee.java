@@ -1,5 +1,8 @@
 package edu.jsu.mcis.cs310.tas_sp25;
 
+import edu.jsu.mcis.cs310.tas_sp25.dao.BadgeDAO;
+import edu.jsu.mcis.cs310.tas_sp25.dao.DAOFactory;
+import edu.jsu.mcis.cs310.tas_sp25.dao.ShiftDAO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -8,6 +11,8 @@ public class Employee {
 
     private final int id, employeeTypeId, departmentId, shiftId;
     private final String badgeId, firstName, middleName, lastName, active, inactive;
+    private Shift shift;
+    private Badge badge;
 
     public Employee(HashMap<String, String> EmployeeDetail) {
 
@@ -22,6 +27,13 @@ public class Employee {
         this.active = (String) EmployeeDetail.get("active");
         this.inactive = (String) EmployeeDetail.get("inactive");
 
+        DAOFactory daoFactory = new DAOFactory("tas.jdbc");
+        ShiftDAO shiftDAO = daoFactory.getShiftDAO();
+        BadgeDAO badgeDAO = daoFactory.getBadgeDAO();
+
+        this.shift = shiftDAO.find(shiftId);
+        this.badge = badgeDAO.find(badgeId);
+
     }
 
     public int getId() {
@@ -31,6 +43,15 @@ public class Employee {
     public int getDepartment() {
         return departmentId;
     }
+
+    public Shift getShift() {
+        return shift;
+    }
+
+    public Badge getBadge() {
+        return badge;
+    }
+    
 
 
     @Override
