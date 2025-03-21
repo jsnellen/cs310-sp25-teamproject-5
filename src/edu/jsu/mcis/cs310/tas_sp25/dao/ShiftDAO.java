@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 public class ShiftDAO {
 
-    private static final String FIND_BY_ID = "SELECT * FROM shift WHERE id = ?";
+    private static final String FIND_BY_ID = "SELECT * FROM shift JOIN dailyschedule ON dailyscheduleid WHERE shift.id = ? AND dailyschedule.id = ?";
     private static final String FIND_BY_BADGE = "SELECT shiftid FROM employee WHERE badgeid =?";
 
     private final DAOFactory daoFactory;
@@ -30,6 +30,9 @@ public class ShiftDAO {
 
                 ps = conn.prepareStatement(FIND_BY_ID);
                 ps.setInt(1, id);
+                ps.setInt(2, id);
+
+                System.err.println(ps.toString());
 
                 boolean hasresults = ps.execute();
 
@@ -42,7 +45,7 @@ public class ShiftDAO {
                         // Store shift data into a HashMap for easy access
                         
                         HashMap<String, String> ShiftDetail = new HashMap<>();
-                        ShiftDetail.put("id", rs.getString("id"));
+                        ShiftDetail.put("id", rs.getString("dailyschedule.id"));
                         ShiftDetail.put("description", rs.getString("description"));
                         ShiftDetail.put("shiftStart", rs.getString("shiftstart"));
                         ShiftDetail.put("shiftStop", rs.getString("shiftstop"));
@@ -55,6 +58,8 @@ public class ShiftDAO {
                         
                         // Create a Shift object using the extracted data
                         shift = new Shift (ShiftDetail);
+
+                        System.err.println(shift.toString());
                         
                     }
 
