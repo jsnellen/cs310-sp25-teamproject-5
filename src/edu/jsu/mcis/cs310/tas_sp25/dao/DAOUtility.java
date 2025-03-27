@@ -8,6 +8,13 @@ import com.github.cliftonlabs.json_simple.*;
 import edu.jsu.mcis.cs310.tas_sp25.EventType;
 import edu.jsu.mcis.cs310.tas_sp25.Punch;
 import edu.jsu.mcis.cs310.tas_sp25.Shift;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+
 
 
 /**
@@ -119,8 +126,58 @@ public final class DAOUtility {
         }
 
         return (int) totalWorkedMinutes;
+ 
+        }
+       
+        public static BigDecimal calculateAbsenteeism(ArrayList<Punch> punchList, Shift shift) {
+        if (punchList == null || punchList.isEmpty() || shift == null) {
+            return BigDecimal.ZERO;
+        }
+
+        // Calculate total minutes worked in the pay period
+        long totalWorkedMinutes = getTotalMinutesWorked(punchList, shift);
+
+        // Calculate total scheduled minutes in the pay period
+        long totalScheduledMinutes = getScheduledMinutes(shift, punchList);
+
+        // Ensure valid calculations
+        if (totalScheduledMinutes <= 0) {
+            return BigDecimal.ZERO;
+        }
+
+        // Absenteeism = (Scheduled - Worked) / Scheduled * 100
+        BigDecimal absenteeism = new BigDecimal(totalScheduledMinutes - totalWorkedMinutes)
+                .divide(new BigDecimal(totalScheduledMinutes), 4, RoundingMode.HALF_UP)
+                .multiply(new BigDecimal(100));
+
+        return absenteeism.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private static long getTotalMinutesWorked(ArrayList<Punch> punchList, Shift shift) {
+        long totalMinutes = 0;
+        
+        for (Punch punch : punchList) {
+            totalMinutes += punch.getMinutesWorked(shift);  // Ensure Punch has this method
+        }
+
+        return totalMinutes;
+    }
+    
+    
+    private static long getScheduledMinutes(Shift shift, ArrayList<Punch> punchList) {
+        LocalDate startDate = punchList.get(0).getAdjustedTimestamp().toLocalDate()
+                .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        LocalDate endDate = startDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+
+        long workingDays = 0;
+
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            if (shift.isWorkDay(date.getDayOfWeek())) {  // Assuming Shift has isWorkDay() method
+                workingDays++;
+            }
+        }
+
+        return workingDays * shift.getShiftDuration().toMinutes();
     }
 }
-
-
-    
+          

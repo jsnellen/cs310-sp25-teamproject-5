@@ -100,6 +100,12 @@ public class Shift {
         public Duration getShiftDuration() {
             return shiftduration;
         }
+        
+        //Addeed this method to determine if a given day is a workday,
+        //assuming the workweek runs Monday through Friday.
+        public boolean isWorkDay(DayOfWeek day) {
+            return !day.equals(DayOfWeek.SATURDAY) && !day.equals(DayOfWeek.SUNDAY);
+        }
 
         // Override the toString() method to display shift details
         @Override
