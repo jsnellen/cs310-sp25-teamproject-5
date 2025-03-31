@@ -307,15 +307,33 @@ public class Punch {
     //Had to add this to fix the getScheduledMinutes in the DAOUtility
     public int getMinutesWorked(Shift shift) {
    
+    int minutesWorked = 0;
+    this.adjust(shift);
+    adjustedtimestamp = getAdjustedTimestamp();
+
+    System.err.println("Adjusted Time Stamp: " + adjustedtimestamp);
+
     if (adjustedtimestamp != null) {
         // Get the shift's stop time
         LocalTime shiftStopTime = shift.getShiftStop();
+
+        System.err.println("Shift Stop Time: " + shiftStopTime);
         
         // Calculate the difference between the punch's adjusted timestamp and the shift's stop time
         // Return the difference in minutes
-        return (int) java.time.Duration.between(adjustedtimestamp, shiftStopTime).toMinutes();
+
+        LocalTime time = adjustedtimestamp.toLocalTime();
+        System.err.println("Time using LocalTime: " + time);
+
+        minutesWorked = (int) java.time.Duration.between(time, shiftStopTime).toMinutes();
+
+        System.err.println("getMinutesWorked test point: " + minutesWorked);
+
+        return minutesWorked;
+        //return (int) java.time.Duration.between(adjustedtimestamp, shiftStopTime).toMinutes();
     } else {
         
+        System.err.println("Method getMinutesWorked has returned 0");
         return 0;
     }
     

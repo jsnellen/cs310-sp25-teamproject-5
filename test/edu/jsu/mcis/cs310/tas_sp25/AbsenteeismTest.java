@@ -41,8 +41,11 @@ public class AbsenteeismTest {
         /* Get Pay Period Punch List */
         
         LocalDate ts = p.getOriginaltimestamp().toLocalDate();
+        System.err.println("Test Point 1: " + ts);
         LocalDate begin = ts.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
+        System.err.println("Test Point 2: " + begin);
         LocalDate end = begin.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+        System.err.println("Test Point 3: " + end);
         
         ArrayList<Punch> punchlist = punchDAO.list(b, begin, end);
         
@@ -55,6 +58,7 @@ public class AbsenteeismTest {
         /* Compute Pay Period Total Absenteeism */
         
         BigDecimal percentage = DAOUtility.calculateAbsenteeism(punchlist, s);
+        System.err.println("Test Point 4: " + percentage);
         
         /* Insert Absenteeism Into Database */
         
@@ -88,7 +92,6 @@ public class AbsenteeismTest {
         /* Get Pay Period Punch List */
         
         LocalDate ts = p.getOriginaltimestamp().toLocalDate();
-        System.err.println("TEST: " + ts);
         LocalDate begin = ts.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         LocalDate end = begin.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
         

@@ -125,6 +125,8 @@ public final class DAOUtility {
             }
         }
 
+        //System.err.println("Worked Minutes" + totalWorkedMinutes);
+
         return (int) totalWorkedMinutes;
  
         }
@@ -139,6 +141,8 @@ public final class DAOUtility {
 
         // Calculate total minutes worked in the pay period
         long totalWorkedMinutes = getTotalMinutesWorked(punchList, shift);
+
+        //System.err.println("Total Minutes Worked: " + totalWorkedMinutes);
 
         // Calculate total scheduled minutes in the pay period
         long totalScheduledMinutes = getScheduledMinutes(shift, punchList);
@@ -156,9 +160,11 @@ public final class DAOUtility {
                 .divide(new BigDecimal(totalScheduledMinutes), 4, RoundingMode.HALF_UP)
                 .multiply(new BigDecimal(100));
 
-        System.err.println(absenteeism.setScale(2, RoundingMode.HALF_UP));
+        BigDecimal absenteeism2 = absenteeism.setScale(2, RoundingMode.HALF_UP);
 
-        return absenteeism.setScale(2, RoundingMode.HALF_UP);
+        System.err.println("BigDecimal: " + absenteeism2);
+
+        return absenteeism2;
     }
 
     private static long getTotalMinutesWorked(ArrayList<Punch> punchList, Shift shift) {
