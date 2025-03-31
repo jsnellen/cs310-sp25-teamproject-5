@@ -141,7 +141,7 @@ public class PunchDAO {
 
                         punch = new Punch (PunchDetail);
 
-                        System.err.println("AAAAAAA");
+                        System.err.println("Punch ID:" + PunchDetail.get("id"));
 
                         p1.add(punch);
                         

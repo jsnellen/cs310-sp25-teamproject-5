@@ -131,6 +131,9 @@ public final class DAOUtility {
        
         public static BigDecimal calculateAbsenteeism(ArrayList<Punch> punchList, Shift shift) {
         if (punchList == null || punchList.isEmpty() || shift == null) {
+
+            System.err.println("Method calculateAbsenteeism has null input.");
+
             return BigDecimal.ZERO;
         }
 
@@ -142,6 +145,9 @@ public final class DAOUtility {
 
         // Ensure valid calculations
         if (totalScheduledMinutes <= 0) {
+
+            System.err.println("Method calculateAbsenteeism has returned less than 0.");
+
             return BigDecimal.ZERO;
         }
 
@@ -149,6 +155,8 @@ public final class DAOUtility {
         BigDecimal absenteeism = new BigDecimal(totalScheduledMinutes - totalWorkedMinutes)
                 .divide(new BigDecimal(totalScheduledMinutes), 4, RoundingMode.HALF_UP)
                 .multiply(new BigDecimal(100));
+
+        System.err.println(absenteeism.setScale(2, RoundingMode.HALF_UP));
 
         return absenteeism.setScale(2, RoundingMode.HALF_UP);
     }

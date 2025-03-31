@@ -6,7 +6,6 @@ package edu.jsu.mcis.cs310.tas_sp25.dao;
 
 import edu.jsu.mcis.cs310.tas_sp25.Absenteeism;
 import edu.jsu.mcis.cs310.tas_sp25.Employee;
-import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -58,6 +57,8 @@ public class AbsenteeismDAO {
             ps.setDate(2, Date.valueOf(absenteeism.getStartDate()));
             ps.setBigDecimal(3, absenteeism.getPercentage());
             ps.setBigDecimal(4, absenteeism.getPercentage());
+
+            System.err.println(ps);
 
             ps.executeUpdate();
         } catch (SQLException e) {

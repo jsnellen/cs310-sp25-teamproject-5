@@ -24,6 +24,12 @@ public class Absenteeism {
         this.percentage = (BigDecimal) AbsenteeDetail.get("percentage");
     }
 
+    public Absenteeism(Employee e, LocalDate ts, BigDecimal percentage2) {
+        this.employeeid = e;
+        this.startDate = ts;
+        this.percentage = percentage2;
+    }
+
     public Employee getEmployeeid() {
         return employeeid;
     }
