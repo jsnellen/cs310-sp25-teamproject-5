@@ -26,22 +26,30 @@ public class AbsenteeismDAO {
 
     public Absenteeism find(Employee employee, LocalDate payPeriodStartDate) {
         Absenteeism absenteeism = null;
+        PreparedStatement ps = null;
 
-        try (Connection conn = daoFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(QUERY_FIND)) {
+        try {
+            
+            Connection conn = daoFactory.getConnection();
 
-            ps.setInt(1, employee.getId());
-            ps.setDate(2, Date.valueOf(payPeriodStartDate));
+            if (conn.isValid(0)) {
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    HashMap<Object, Object> absenteeDetail = new HashMap<>();
-                    absenteeDetail.put("employee", employee);
-                    absenteeDetail.put("payPeriodStartDate", payPeriodStartDate);
-                    absenteeDetail.put("percentage", rs.getBigDecimal("percentage"));
-                    absenteeism = new Absenteeism(absenteeDetail);
-                }
+                ps = conn.prepareStatement(QUERY_FIND); 
+
+                ps.setInt(1, employee.getId());
+                ps.setDate(2, Date.valueOf(payPeriodStartDate));
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        HashMap<Object, Object> absenteeDetail = new HashMap<>();
+                        absenteeDetail.put("employeeid", employee.getId());
+                        absenteeDetail.put("startDate", payPeriodStartDate);
+                        absenteeDetail.put("percentage", rs.getBigDecimal("percentage"));
+                        absenteeism = new Absenteeism(absenteeDetail);
+                    }
             }
+            
+        }
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
         }
@@ -50,19 +58,30 @@ public class AbsenteeismDAO {
     }
 
     public void create(Absenteeism absenteeism) {
-        try (Connection conn = daoFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(QUERY_CREATE)) {
 
-            ps.setInt(1, absenteeism.getEmployeeid().getId());
-            ps.setDate(2, Date.valueOf(absenteeism.getStartDate()));
-            ps.setBigDecimal(3, absenteeism.getPercentage());
-            ps.setBigDecimal(4, absenteeism.getPercentage());
+        PreparedStatement ps = null;
+        try {
+            
+            Connection conn = daoFactory.getConnection();
+             
+            if (conn.isValid(0)) {
 
-            System.err.println(ps);
+                ps = conn.prepareStatement(QUERY_CREATE);
 
-            ps.executeUpdate();
+                ps.setInt(1, absenteeism.getEmployeeid());
+                ps.setDate(2, Date.valueOf(absenteeism.getStartDate()));
+                ps.setBigDecimal(3, absenteeism.getPercentage());
+                ps.setBigDecimal(4, absenteeism.getPercentage());
+
+                System.err.println(ps);
+
+                ps.executeUpdate();
+            }
+
         } catch (SQLException e) {
+
             throw new DAOException(e.getMessage());
+
         }
     }
     

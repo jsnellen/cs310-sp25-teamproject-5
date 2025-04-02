@@ -37,6 +37,8 @@ public class AbsenteeismTest {
         Employee e = employeeDAO.find(p.getBadge());
         Shift s = e.getShift();
         Badge b = e.getBadge();
+
+        System.err.println("Badge ID: " + e.getBadge().getId());
         
         /* Get Pay Period Punch List */
         
@@ -64,10 +66,19 @@ public class AbsenteeismTest {
         
         Absenteeism a1 = new Absenteeism(e, ts, percentage);
         absenteeismDAO.create(a1);
+
+        System.err.println("Test Point 5: " + a1.getEmployeeid());
+
+        
         
         /* Retrieve Absenteeism From Database */
         
         Absenteeism a2 = absenteeismDAO.find(e, ts);
+
+        System.err.println("Test Point 6: " + a2.getEmployeeid());
+        System.err.println("Test Point 7: " + a2.getStartDate());
+
+
         
         /* Compare to Expected Value */
         

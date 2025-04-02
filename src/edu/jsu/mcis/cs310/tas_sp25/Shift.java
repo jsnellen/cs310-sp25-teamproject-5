@@ -1,7 +1,7 @@
 package edu.jsu.mcis.cs310.tas_sp25;
 
-import java.util.*;
 import java.time.*;
+import java.util.*;
 
 public class Shift {
     
@@ -98,6 +98,7 @@ public class Shift {
         }
     
         public Duration getShiftDuration() {
+            System.err.println("Shift Duration: " + shiftduration.toMinutes());
             return shiftduration;
         }
         

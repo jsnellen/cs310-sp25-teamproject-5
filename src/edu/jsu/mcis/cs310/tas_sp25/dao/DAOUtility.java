@@ -147,6 +147,8 @@ public final class DAOUtility {
         // Calculate total scheduled minutes in the pay period
         long totalScheduledMinutes = getScheduledMinutes(shift, punchList);
 
+        System.err.println("Sheduled and worked minutes: " + totalScheduledMinutes + " " + totalWorkedMinutes);
+
         // Ensure valid calculations
         if (totalScheduledMinutes <= 0) {
 
