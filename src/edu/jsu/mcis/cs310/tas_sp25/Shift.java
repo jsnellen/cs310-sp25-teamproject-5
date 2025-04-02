@@ -41,11 +41,15 @@ public class Shift {
         // Check for time duration between differant dates
         if (Duration.between(shiftstart,shiftstop).isNegative()) {
             
-            this.shiftduration = Duration.between(shiftstart,shiftstop).plusDays(1);
+            this.shiftduration = Duration.between(shiftstart, shiftstop).plusDays(1);
+
+            System.err.println("Shift Duration test point: " + shiftduration.toMinutes());
             
         } else { 
             
-            this.shiftduration = Duration.between(shiftstart,shiftstop);
+            this.shiftduration = Duration.between(shiftstart, shiftstop);
+
+            System.err.println("Shift Duration test point2: " + shiftduration.toMinutes());
             
         } 
         

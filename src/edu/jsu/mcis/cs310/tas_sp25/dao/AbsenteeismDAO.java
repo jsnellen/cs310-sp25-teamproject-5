@@ -6,6 +6,7 @@ package edu.jsu.mcis.cs310.tas_sp25.dao;
 
 import edu.jsu.mcis.cs310.tas_sp25.Absenteeism;
 import edu.jsu.mcis.cs310.tas_sp25.Employee;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -44,7 +45,7 @@ public class AbsenteeismDAO {
                         HashMap<Object, Object> absenteeDetail = new HashMap<>();
                         absenteeDetail.put("employeeid", employee.getId());
                         absenteeDetail.put("startDate", payPeriodStartDate);
-                        absenteeDetail.put("percentage", rs.getBigDecimal("percentage"));
+                        absenteeDetail.put("percentage", rs.getBigDecimal("percentage").setScale(2, RoundingMode.HALF_UP));
                         absenteeism = new Absenteeism(absenteeDetail);
                     }
             }

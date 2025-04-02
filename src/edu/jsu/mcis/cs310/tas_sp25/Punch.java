@@ -311,23 +311,23 @@ public class Punch {
     this.adjust(shift);
     adjustedtimestamp = getAdjustedTimestamp();
 
-    System.err.println("Adjusted Time Stamp: " + adjustedtimestamp);
+    //System.err.println("Adjusted Time Stamp: " + adjustedtimestamp);
 
     if (adjustedtimestamp != null) {
         // Get the shift's stop time
         LocalTime shiftStopTime = shift.getShiftStop();
 
-        System.err.println("Shift Stop Time: " + shiftStopTime);
+        //System.err.println("Shift Stop Time: " + shiftStopTime);
         
         // Calculate the difference between the punch's adjusted timestamp and the shift's stop time
         // Return the difference in minutes
 
         LocalTime time = adjustedtimestamp.toLocalTime();
-        System.err.println("Time using LocalTime: " + time);
+        //System.err.println("Time using LocalTime: " + time);
 
         minutesWorked = (int) java.time.Duration.between(time, shiftStopTime).toMinutes();
 
-        System.err.println("getMinutesWorked test point: " + minutesWorked);
+        //System.err.println("getMinutesWorked test point: " + minutesWorked);
 
         return minutesWorked;
         //return (int) java.time.Duration.between(adjustedtimestamp, shiftStopTime).toMinutes();

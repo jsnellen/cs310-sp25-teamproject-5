@@ -63,6 +63,8 @@ public final class DAOUtility {
         boolean lunchDeductible = false;
         long totalWorkedMinutes = 0;
 
+        ArrayList<Integer> testing = new ArrayList<Integer>();
+
         for (Punch punch : dailypunchlist) {
             EventType eventType = punch.getPunchtype();
             LocalDateTime punchTimestamp = punch.getAdjustedTimestamp();
@@ -106,15 +108,18 @@ public final class DAOUtility {
                     
                     if (shiftDurationMinutes > lunchDurationMinutes) {
                         totalWorkedMinutes += shiftDurationMinutes - lunchDurationMinutes;
+                        testing.add((int)shiftDurationMinutes - (int)lunchDurationMinutes);
                         
                     } else {
                         
                         totalWorkedMinutes += shiftDurationMinutes;
+                        testing.add((int)shiftDurationMinutes);
                     }
                     
                 } else {
                     
                     totalWorkedMinutes += shiftDurationMinutes;
+                    testing.add((int)shiftDurationMinutes);
                     
                 }
 
@@ -126,7 +131,7 @@ public final class DAOUtility {
         }
 
         //System.err.println("Worked Minutes" + totalWorkedMinutes);
-
+        System.err.println(testing);
         return (int) totalWorkedMinutes;
  
         }
@@ -140,7 +145,8 @@ public final class DAOUtility {
         }
 
         // Calculate total minutes worked in the pay period
-        long totalWorkedMinutes = getTotalMinutesWorked(punchList, shift);
+        //long totalWorkedMinutes = getTotalMinutesWorked(punchList, shift);
+        long totalWorkedMinutes = calculateTotalMinutes(punchList, shift);
 
         //System.err.println("Total Minutes Worked: " + totalWorkedMinutes);
 
@@ -157,25 +163,32 @@ public final class DAOUtility {
             return BigDecimal.ZERO;
         }
 
-        // Absenteeism = (Scheduled - Worked) / Scheduled * 100
+        // Absenteeism = (Scheduled - Worked) / Scheduled * 100 2520
         BigDecimal absenteeism = new BigDecimal(totalScheduledMinutes - totalWorkedMinutes)
-                .divide(new BigDecimal(totalScheduledMinutes), 4, RoundingMode.HALF_UP)
-                .multiply(new BigDecimal(100));
+                .divide(new BigDecimal(totalScheduledMinutes))
+                .multiply(new BigDecimal(100))
+                .setScale(2, RoundingMode.HALF_UP);
 
-        BigDecimal absenteeism2 = absenteeism.setScale(2, RoundingMode.HALF_UP);
-
-        System.err.println("BigDecimal: " + absenteeism2);
-
-        return absenteeism2;
+        
+        //absenteeism.setScale(2, RoundingMode.HALF_UP);
+       
+        return absenteeism;
     }
 
     private static long getTotalMinutesWorked(ArrayList<Punch> punchList, Shift shift) {
         long totalMinutes = 0;
+
+        ArrayList<Integer> testing = new ArrayList<Integer>();
         
         for (Punch punch : punchList) {
+
+            //System.err.println("Inside getTotalMinutesWorked for loop: " + punch.getMinutesWorked(shift));
             totalMinutes += punch.getMinutesWorked(shift);  // Ensure Punch has this method
+            testing.add(punch.getMinutesWorked(shift));
         }
 
+        System.err.println(testing);
+        System.err.println("getTotalMinutesWorked return value: " + totalMinutes);
         return totalMinutes;
     }
     
@@ -186,6 +199,9 @@ public final class DAOUtility {
         LocalDate endDate = startDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
 
         long workingDays = 0;
+        long shiftDurationMinutes = shift.getShiftDuration().toMinutes();
+        long lunchDurationMinutes = shift.getLunchDuration().toMinutes();
+        long scheduledMinutes = shiftDurationMinutes - lunchDurationMinutes;
 
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             if (shift.isWorkDay(date.getDayOfWeek())) {  // Assuming Shift has isWorkDay() method
@@ -193,7 +209,7 @@ public final class DAOUtility {
             }
         }
 
-        return workingDays * shift.getShiftDuration().toMinutes();
+        return workingDays * scheduledMinutes;
     }
 }
           
