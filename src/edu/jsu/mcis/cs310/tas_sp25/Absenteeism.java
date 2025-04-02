@@ -7,8 +7,10 @@ package edu.jsu.mcis.cs310.tas_sp25;
 import edu.jsu.mcis.cs310.tas_sp25.dao.DAOFactory;
 import edu.jsu.mcis.cs310.tas_sp25.dao.EmployeeDAO;
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.HashMap;
 
 /**
@@ -29,7 +31,8 @@ public class Absenteeism {
         EmployeeDAO employeeDAO = daoFactory.getEmployeeDAO();
 
         this.employee = employeeDAO.find(employeeid);
-        this.startDate = (LocalDate) AbsenteeDetail.get("startDate");
+        this.startDate = ((LocalDate) AbsenteeDetail.get("startDate"))
+        .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         this.percentage = (BigDecimal) AbsenteeDetail.get("percentage");
     }
 
