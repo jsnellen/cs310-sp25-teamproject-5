@@ -166,11 +166,7 @@ public final class DAOUtility {
         // Absenteeism = (Scheduled - Worked) / Scheduled * 100 2520
         BigDecimal absenteeism = new BigDecimal(totalScheduledMinutes - totalWorkedMinutes)
                 .divide(new BigDecimal(totalScheduledMinutes))
-                .multiply(new BigDecimal(100))
-                .setScale(2, RoundingMode.HALF_UP);
-
-        
-        //absenteeism.setScale(2, RoundingMode.HALF_UP);
+                .multiply(new BigDecimal(100));
        
         return absenteeism;
     }
