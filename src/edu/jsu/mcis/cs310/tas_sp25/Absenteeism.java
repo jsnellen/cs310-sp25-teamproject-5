@@ -34,10 +34,10 @@ public class Absenteeism {
         this.startDate = ((LocalDate) AbsenteeDetail.get("startDate"))
         .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         this.percentage = (BigDecimal) AbsenteeDetail.get("percentage");
-    }
+    } 
 
     public Absenteeism(Employee e, LocalDate ts, BigDecimal percentage2) {
-        this.employee = e;
+        this.employee = e;  // can get rid of!
         this.employeeid = e.getId();
         this.startDate = ts;
         this.percentage = percentage2;
