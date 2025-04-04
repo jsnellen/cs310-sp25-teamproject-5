@@ -69,6 +69,8 @@ public final class DAOUtility {
             EventType eventType = punch.getPunchtype();
             LocalDateTime punchTimestamp = punch.getAdjustedTimestamp();
 
+            System.err.println("Adjusted time stamp: " + punchTimestamp);
+
             switch (eventType) {
                 case CLOCK_IN:
                     // Set the shift start time when a clock-in punch is encountered
@@ -97,7 +99,7 @@ public final class DAOUtility {
                 long shiftDurationMinutes = Duration.between(shiftStart, shiftStop).toMinutes();
 
                 // Check if the shift duration exceeds the lunch threshold
-                if (shiftDurationMinutes > shift.getLunchThreshold()) {
+                if (shiftDurationMinutes - shift.getLunchDuration().toMinutes() > shift.getLunchThreshold()) {
                     lunchDeductible = true;
                 }
 
@@ -131,7 +133,7 @@ public final class DAOUtility {
         }
 
         //System.err.println("Worked Minutes" + totalWorkedMinutes);
-        System.err.println(testing);
+        System.err.println("Worked Minutes: " + testing);
         return (int) totalWorkedMinutes;
  
         }
@@ -165,12 +167,13 @@ public final class DAOUtility {
 
         // Absenteeism = (Scheduled - Worked) / Scheduled * 100 2520
         BigDecimal absenteeism = new BigDecimal(totalScheduledMinutes - totalWorkedMinutes)
-                .divide(new BigDecimal(totalScheduledMinutes))
-                .multiply(new BigDecimal(100));
+                .divide(new BigDecimal(totalScheduledMinutes).setScale(4, RoundingMode.HALF_UP))
+                .multiply(new BigDecimal(100).setScale(4, RoundingMode.HALF_UP));
        
         return absenteeism;
     }
 
+    /* 
     private static long getTotalMinutesWorked(ArrayList<Punch> punchList, Shift shift) {
         long totalMinutes = 0;
 
@@ -187,12 +190,14 @@ public final class DAOUtility {
         System.err.println("getTotalMinutesWorked return value: " + totalMinutes);
         return totalMinutes;
     }
-    
+    */
     
     private static long getScheduledMinutes(Shift shift, ArrayList<Punch> punchList) {
         LocalDate startDate = punchList.get(0).getAdjustedTimestamp().toLocalDate()
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         LocalDate endDate = startDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+
+
 
         long workingDays = 0;
         long shiftDurationMinutes = shift.getShiftDuration().toMinutes();
