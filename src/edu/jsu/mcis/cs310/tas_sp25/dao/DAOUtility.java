@@ -151,4 +151,60 @@ public final class DAOUtility {
         
         return workingDays * scheduledMinutes;
     }
+    
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = 
+        DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+    private static final DateTimeFormatter ADJUSTED_FORMATTER = 
+        DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
+    
+    public static String getPunchListPlusTotalsAsJSON(ArrayList<Punch> punchlist, Shift shift) {
+        // Create list to hold punch data
+        ArrayList<Map<String, String>> jsonPunchList = new ArrayList<>();
+        
+        // Process each punch and add to jsonPunchList
+        for (Punch punch : punchlist) {
+            Map<String, String> punchData = new LinkedHashMap<>();
+            
+            // Format timestamps according to expected format
+            String originalTimestamp = punch.getOriginaltimestamp().format(TIMESTAMP_FORMATTER);
+            String adjustedTimestamp = punch.getAdjustedTimestamp().format(ADJUSTED_FORMATTER);
+            
+            // Put fields in exact expected order
+            punchData.put("originaltimestamp", originalTimestamp.toUpperCase());
+            punchData.put("badgeid", punch.getBadge().getId());
+            punchData.put("adjustedtimestamp", adjustedTimestamp.toUpperCase());
+            
+            // Handle adjustment type formatting
+            String adjustmentType = punch.getAdjustmentType().toString();
+            if ("NONE".equals(adjustmentType)) {
+                adjustmentType = "None";
+            }
+            punchData.put("adjustmenttype", adjustmentType);
+            
+            punchData.put("terminalid", String.valueOf(punch.getTerminalid()));
+            punchData.put("id", String.valueOf(punch.getId()));
+            punchData.put("punchtype", punch.getPunchtype().toString());
+            
+            jsonPunchList.add(punchData);
+        }
+        
+        // Calculate totals
+        int totalMinutes = calculateTotalMinutes(punchlist, shift);
+        BigDecimal absenteeism = calculateAbsenteeism(punchlist, shift);
+        
+        // Create final data structure with specific field order
+        Map<String, Object> jsonData = new LinkedHashMap<>();
+        jsonData.put("absenteeism", String.format("%.2f%%", absenteeism));
+        jsonData.put("totalminutes", totalMinutes);
+        jsonData.put("punchlist", jsonPunchList);
+        
+        // Serialize to JSON
+        try {
+            return Jsoner.serialize(jsonData);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "{}";
+        }
+    }
+    
 }
