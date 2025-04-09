@@ -225,6 +225,7 @@ public class Punch {
      */
     @Override
     public String toString() {
+
          StringBuilder s = new StringBuilder();
 
         String dateTimeString = timestamp;
@@ -236,8 +237,6 @@ public class Punch {
         LocalDateTime dateTime = LocalDateTime.parse(dateTimeString, start);
         String formattedDateTime = dateTime.format(formatter);
 
-        //s.append('#').append(badgeid).append(' ');
-        //s.append("CLOCK IN: ");
         s.append(formattedDateTime);
 
         return s.toString().toUpperCase();
@@ -295,8 +294,6 @@ public class Punch {
 
         // Build the adjusted punch string
     
-        // Same issue here as in printOriginal(). I removed the unnecessary appends. (Ralph)
-    
         build.append("#")
              .append(badge.getId()).append(" ")
              .append(eventtype).append(": ") 
@@ -324,9 +321,6 @@ public class Punch {
     
         // Build the adjusted punch string
         
-        // Same issue here as in printOriginal(). I removed the unnecessary appends. (Ralph)
-        
-        
           build
              .append(dayOfTheWeek.name().substring(0, 3))
              .append(" ")
@@ -341,36 +335,5 @@ public class Punch {
      * @param shift the shift configuration
      * @return number of minutes worked
      */
-    public int getMinutesWorked(Shift shift) {
-      
-      int minutesWorked = 0;
-      this.adjust(shift);
-      adjustedtimestamp = getAdjustedTimestamp();
 
-      //System.err.println("Adjusted Time Stamp: " + adjustedtimestamp);
-
-      if (adjustedtimestamp != null) {
-        // Get the shift's stop time
-        LocalTime shiftStopTime = shift.getShiftStop();
-
-        //System.err.println("Shift Stop Time: " + shiftStopTime);
-        
-        // Calculate the difference between the punch's adjusted timestamp and the shift's stop time
-        // Return the difference in minutes
-
-        LocalTime time = adjustedtimestamp.toLocalTime();
-        //System.err.println("Time using LocalTime: " + time);
-
-        minutesWorked = (int) java.time.Duration.between(time, shiftStopTime).toMinutes();
-
-        //System.err.println("getMinutesWorked test point: " + minutesWorked);
-
-        return minutesWorked;
-        //return (int) java.time.Duration.between(adjustedtimestamp, shiftStopTime).toMinutes();
-      } else {
-        
-        System.err.println("Method getMinutesWorked has returned 0");
-        return 0;
-      }
-    }
 } 
