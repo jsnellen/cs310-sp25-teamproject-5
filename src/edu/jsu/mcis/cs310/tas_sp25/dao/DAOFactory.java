@@ -1,3 +1,9 @@
+/**
+ * DAOFactory is responsible for creating and managing DAO instances
+ * and maintaining a single database connection.
+ * It uses configuration properties (like database URL, username, and password)
+ * to establish the connection and return DAOs for different entities.
+ */
 package edu.jsu.mcis.cs310.tas_sp25.dao;
 
 import java.sql.*;
@@ -12,6 +18,11 @@ public final class DAOFactory {
     
     private Connection conn = null;
 
+    /**
+     * Constructs a DAOFactory using a prefix to read database connection properties.
+     *
+     * @param prefix the prefix used to locate the database properties
+     */
     public DAOFactory(String prefix) {
 
         DAOProperties properties = new DAOProperties(prefix);
@@ -28,28 +39,67 @@ public final class DAOFactory {
 
     }
 
+    /**
+     * Returns the current database connection used by DAOs.
+     *
+     * @return the established {@link Connection}
+     */
     Connection getConnection() {
         return conn;
     }
 
+    /**
+     * Returns an instance of {@link BadgeDAO}.
+     *
+     * @return BadgeDAO instance
+     */
     public BadgeDAO getBadgeDAO() {
         return new BadgeDAO(this);
     }
+
+    /**
+     * Returns an instance of {@link DepartmentDAO}.
+     *
+     * @return DepartmentDAO instance
+     */
     public DepartmentDAO getDepartmentDAO() {
         return new DepartmentDAO(this);
     }
+
+    /**
+     * Returns an instance of {@link PunchDAO}.
+     *
+     * @return PunchDAO instance
+     */
     public PunchDAO getPunchDAO() {
         return new PunchDAO(this);
     }
-    
+
+    /**
+     * Returns an instance of {@link ShiftDAO}.
+     *
+     * @return ShiftDAO instance
+     */
     public ShiftDAO getShiftDAO() {
         return new ShiftDAO(this);
     }
-    
+
+    /**
+     * Returns an instance of {@link EmployeeDAO}.
+     *
+     * @return EmployeeDAO instance
+     */
     public EmployeeDAO getEmployeeDAO() {
         return new EmployeeDAO(this);
     }
+
+    /**
+     * Returns an instance of {@link AbsenteeismDAO}.
+     *
+     * @return AbsenteeismDAO instance
+     */
     public AbsenteeismDAO getAbsenteeismDAO() {
         return new AbsenteeismDAO(this);
     }
 }
+

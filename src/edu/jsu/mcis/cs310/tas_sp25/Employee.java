@@ -7,16 +7,56 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
+/**
+ * The Employee class represents an employee in the time and attendance system.
+ * It contains employee details such as ID, name, type, department, shift, and badge.
+ */
 public class Employee {
 
-    private final int id, employeeTypeId, departmentId, shiftId;
-    private final String badgeId, firstName, middleName, lastName, active, inactive;
+    /** The unique ID of the employee. */
+    private final int id;
+
+    /** The employee type ID (e.g., Full-Time, Temporary/Part-Time). */
+    private final int employeeTypeId;
+
+    /** The department ID to which the employee belongs. */
+    private final int departmentId;
+
+    /** The shift ID assigned to the employee. */
+    private final int shiftId;
+
+    /** The badge ID associated with the employee. */
+    private final String badgeId;
+
+    /** The first name of the employee. */
+    private final String firstName;
+
+    /** The middle name of the employee. */
+    private final String middleName;
+
+    /** The last name of the employee. */
+    private final String lastName;
+
+    /** The activation status of the employee. */
+    private final String active;
+
+    /** The deactivation status of the employee. */
+    private final String inactive;
+
+    /** The shift assigned to the employee. */
     private final Shift shift;
+
+    /** The badge associated with the employee. */
     private final Badge badge;
 
+    /**
+     * Constructs an Employee object using the details provided in a HashMap.
+     *
+     * @param EmployeeDetail a HashMap containing employee details such as id, name, type, department, and shift.
+     */
     public Employee(HashMap<String, String> EmployeeDetail) {
 
-        this.id = Integer.valueOf((String) EmployeeDetail.get("id"));;
+        this.id = Integer.valueOf((String) EmployeeDetail.get("id"));
         this.employeeTypeId = Integer.valueOf((String) EmployeeDetail.get("employeeTypeId"));
         this.departmentId = Integer.valueOf((String) EmployeeDetail.get("departmentId"));
         this.shiftId = Integer.valueOf((String) EmployeeDetail.get("shiftId"));
@@ -36,23 +76,48 @@ public class Employee {
 
     }
 
+    /**
+     * Returns the unique ID of the employee.
+     *
+     * @return the ID of the employee.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Returns the department ID of the employee.
+     *
+     * @return the department ID of the employee.
+     */
     public int getDepartment() {
         return departmentId;
     }
 
+    /**
+     * Returns the Badge object associated with the employee.
+     *
+     * @return the Badge of the employee.
+     */
     public Badge getBadge() {
         return this.badge;
     }
 
+    /**
+     * Returns the Shift object assigned to the employee.
+     *
+     * @return the Shift of the employee.
+     */
     public Shift getShift() {
         return this.shift;
     }
 
-
+    /**
+     * Returns a string representation of the Employee object in the format:
+     * "ID #<id>: <lastName>, <firstName> <middleName> (#<badgeId>), Type: <employeeType>, Department: <department>, Active: <activeDate>".
+     *
+     * @return a string representation of the employee.
+     */
     @Override
     public String toString() {
 
@@ -63,6 +128,7 @@ public class Employee {
         s.append(' ').append(middleName).append(" (#");
         s.append(badgeId).append("), ").append("Type: ");
 
+        // Append employee type based on employeeTypeId
         switch(employeeTypeId) {
             case 1:
                 s.append("Full-Time, ");
@@ -76,6 +142,7 @@ public class Employee {
 
         s.append("Department: ");
 
+        // Append department name based on departmentId
         switch(departmentId) {
             case 1:
                 s.append("Assembly, ");
@@ -113,8 +180,8 @@ public class Employee {
 
         s.append("Active: ");
 
+        // Format the active date
         String dateTimeString = active;
-        // Define the desired format
         DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
@@ -124,11 +191,6 @@ public class Employee {
         s.append(formattedDateTime);
 
         return s.toString();
-
-        /*  EXPECTED VALUE
-            "ID #14: Donaldson, Kathleen C (#229324A4), Type: Full-Time, Department: Press, Active: 02/02/2017"
-        */
     }
-
 }
 

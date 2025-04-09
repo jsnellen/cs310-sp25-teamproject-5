@@ -1,3 +1,7 @@
+/**
+ * Represents a Punch record in the time and attendance system.
+ * A Punch records an employee's clock-in, clock-out, or time-out event.
+ */
 package edu.jsu.mcis.cs310.tas_sp25;
 
 import edu.jsu.mcis.cs310.tas_sp25.dao.BadgeDAO;
@@ -19,34 +23,40 @@ public class Punch {
     private LocalDateTime adjustedtimestamp;
     private Shift shift;
 
+    /**
+     * Constructs a Punch object using details from a database HashMap.
+     *
+     * @param PunchDetail a HashMap containing punch attributes retrieved from the database
+     */
     public Punch(HashMap<String, String> PunchDetail) {
-
         DAOFactory daoFactory = new DAOFactory("tas.jdbc");
         BadgeDAO badgeDAO = daoFactory.getBadgeDAO();
 
-        this.id = Integer.valueOf((String) PunchDetail.get("id"));
-        this.terminalid = Integer.valueOf((String) PunchDetail.get("terminalid"));
-        this.badgeid = (String) PunchDetail.get("badgeid");
-        this.timestamp = (String) PunchDetail.get("timestamp");
-        this.eventtypeid = Integer.valueOf((String) PunchDetail.get("eventtypeid"));
+        this.id = Integer.valueOf(PunchDetail.get("id"));
+        this.terminalid = Integer.valueOf(PunchDetail.get("terminalid"));
+        this.badgeid = PunchDetail.get("badgeid");
+        this.timestamp = PunchDetail.get("timestamp");
+        this.eventtypeid = Integer.valueOf(PunchDetail.get("eventtypeid"));
         this.badge = badgeDAO.find(badgeid);
         DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.ots = LocalDateTime.parse(PunchDetail.get("timestamp"), start);
 
-        
         switch(eventtypeid) {
             case 0 -> this.eventtype = EventType.CLOCK_OUT;
             case 1 -> this.eventtype = EventType.CLOCK_IN;
             case 2 -> this.eventtype = EventType.TIME_OUT;
-            default -> {
-                this.eventtype = EventType.CLOCK_OUT;
-            }
+            default -> this.eventtype = EventType.CLOCK_OUT;
         }
     }
 
-
+    /**
+     * Constructs a new Punch for live punch data.
+     *
+     * @param i terminal ID
+     * @param badge employee badge
+     * @param clockIn type of punch event
+     */
     public Punch(int i, Badge badge, EventType clockIn) {
-
         this.id = 0;
         this.terminalid = i;
         this.badge = badge;
@@ -55,57 +65,66 @@ public class Punch {
         this.timestamp = null;
         this.ots = LocalDateTime.now();
         this.eventtype = clockIn;
-
     }
 
-
+    /** @return punch ID */
     public int getId() {
         return id;
     }
 
+    /** @return terminal ID */
     public int getTerminalid() {
         return terminalid;
     }
 
+    /** @return badge ID as String */
     public String getBadgeId() {
         return badgeid;
     }
 
+    /** @return Badge object */
     public Badge getBadge() {
         return badge;
     }
 
+    /** @return raw timestamp string */
     public String getTimestamp() {
         return timestamp;
     }
 
+    /** @return original LocalDateTime timestamp */
     public LocalDateTime getOriginaltimestamp() {
         System.err.println(ots);
         return ots;
     }
-    
-    //Jakolbe adding this because my Original gett
-    
+
+    /** @return event type ID */
     public int getEventTypeId() {
         return eventtypeid;
     }
 
+    /** @return EventType of the punch */
     public EventType getPunchtype() {
         return eventtype;
     }
-    
+
+    /** @return adjustment type for punch */
     public PunchAdjustmentType getAdjustmentType(){
         return adjustmenttype;
     }
-    
-    
+
+    /** @return adjusted timestamp if any */
     public LocalDateTime getAdjustedTimestamp(){
         return adjustedtimestamp;
     }
-   
-    
+
+    /**
+     * Adjusts the punch timestamp based on shift rules (start, stop, lunch, rounding).
+     *
+     * @param shift the shift to apply adjustment rules from
+     */
     public void adjust(Shift shift) {
-        adjustmenttype = null;
+         adjustmenttype = null;
         adjustedtimestamp = null;
         boolean isWeekend = false;
         
@@ -198,11 +217,15 @@ public class Punch {
             }
         }
     }
-     
+
+    /**
+     * Returns a string representation of the punch timestamp for display.
+     *
+     * @return formatted string of punch timestamp
+     */
     @Override
     public String toString() {
-
-        StringBuilder s = new StringBuilder();
+         StringBuilder s = new StringBuilder();
 
         String dateTimeString = timestamp;
         // Define the desired format
@@ -218,12 +241,15 @@ public class Punch {
         s.append(formattedDateTime);
 
         return s.toString().toUpperCase();
-
     }
 
+    /**
+     * Returns a formatted string of the original punch for display.
+     *
+     * @return formatted original punch string
+     */
     public String printOriginal() {
-
-        StringBuilder s = new StringBuilder();
+         StringBuilder s = new StringBuilder();
         String timestamp = this.getTimestamp();
         String badgeid = this.getBadgeId();
         int eventtypeid = this.getEventTypeId();
@@ -251,37 +277,42 @@ public class Punch {
         s.append(formattedDateTime);
 
         return s.toString();
-
     }
 
+    /**
+     * Returns a formatted string of the adjusted punch.
+     *
+     * @return formatted adjusted punch string
+     */
     public String printAdjusted() {
-    StringBuilder build = new StringBuilder();
+        StringBuilder build = new StringBuilder();
 
-    // Define the date and time format
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+        // Define the date and time format
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
 
-    // Get the day of the week from the original timestamp
-    DayOfWeek dayOfTheWeek = getOriginaltimestamp().getDayOfWeek();
+        // Get the day of the week from the original timestamp
+        DayOfWeek dayOfTheWeek = getOriginaltimestamp().getDayOfWeek();
 
-    // Build the adjusted punch string
+        // Build the adjusted punch string
     
-    // Same issue here as in printOriginal(). I removed the unnecessary appends. (Ralph)
+        // Same issue here as in printOriginal(). I removed the unnecessary appends. (Ralph)
     
-    build.append("#")
-         .append(badge.getId()).append(" ")
-         .append(eventtype).append(": ") 
-         .append(dayOfTheWeek.name().substring(0, 3))
-         .append(" ")
-         .append(adjustedtimestamp.format(format)) 
-         .append(" (").append(adjustmenttype).append(")");
-    /* 
-      build
-         .append(dayOfTheWeek.name().substring(0, 3))
-         .append(" ")
-         .append(adjustedtimestamp.format(format));
-       */  
-    return build.toString();
+        build.append("#")
+             .append(badge.getId()).append(" ")
+             .append(eventtype).append(": ") 
+             .append(dayOfTheWeek.name().substring(0, 3))
+             .append(" ")
+             .append(adjustedtimestamp.format(format)) 
+             .append(" (").append(adjustmenttype).append(")");
+    
+        return build.toString();
     }
+
+    /**
+     * Returns a string with just day and time from the adjusted timestamp.
+     *
+     * @return formatted day and adjusted time string
+     */
     public String adjustedToString() {
         StringBuilder build = new StringBuilder();
     
@@ -302,18 +333,23 @@ public class Punch {
              .append(adjustedtimestamp.format(format));
              
         return build.toString();
-        }
-    
-    //Had to add this to fix the getScheduledMinutes in the DAOUtility
+    }
+
+    /**
+     * Gets the number of minutes worked by comparing the punch and shift stop time.
+     *
+     * @param shift the shift configuration
+     * @return number of minutes worked
+     */
     public int getMinutesWorked(Shift shift) {
-   
-    int minutesWorked = 0;
-    this.adjust(shift);
-    adjustedtimestamp = getAdjustedTimestamp();
+      
+      int minutesWorked = 0;
+      this.adjust(shift);
+      adjustedtimestamp = getAdjustedTimestamp();
 
-    //System.err.println("Adjusted Time Stamp: " + adjustedtimestamp);
+      //System.err.println("Adjusted Time Stamp: " + adjustedtimestamp);
 
-    if (adjustedtimestamp != null) {
+      if (adjustedtimestamp != null) {
         // Get the shift's stop time
         LocalTime shiftStopTime = shift.getShiftStop();
 
@@ -331,12 +367,10 @@ public class Punch {
 
         return minutesWorked;
         //return (int) java.time.Duration.between(adjustedtimestamp, shiftStopTime).toMinutes();
-    } else {
+      } else {
         
         System.err.println("Method getMinutesWorked has returned 0");
         return 0;
+      }
     }
-    
-    }
-}
-
+} 

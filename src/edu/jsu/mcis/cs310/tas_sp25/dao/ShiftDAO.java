@@ -1,3 +1,7 @@
+/**
+ * Data Access Object (DAO) class for accessing Shift records in the database.
+ * Provides methods for retrieving shifts by ID and by employee badge.
+ */
 package edu.jsu.mcis.cs310.tas_sp25.dao;
 
 import edu.jsu.mcis.cs310.tas_sp25.*;
@@ -6,16 +10,31 @@ import java.util.HashMap;
 
 public class ShiftDAO {
 
+    /** SQL query to find a shift by shift ID. */
     private static final String FIND_BY_ID = "SELECT * FROM shift WHERE id = ?";
+
+    /** SQL query to find a shift by employee badge ID. */
     private static final String FIND_BY_BADGE = "SELECT shiftid FROM employee WHERE badgeid =?";
 
+    /** DAOFactory used to obtain database connections. */
     private final DAOFactory daoFactory;
 
+    /**
+     * Constructs a ShiftDAO using the provided DAOFactory.
+     *
+     * @param daoFactory the DAOFactory to obtain database connections
+     */
     public ShiftDAO(DAOFactory daoFactory) {
         this.daoFactory = daoFactory;
     }
 
-    // Find Shift by ID
+    /**
+     * Retrieves a Shift from the database using the given shift ID.
+     *
+     * @param id the ID of the shift to retrieve
+     * @return a Shift object, or null if no match is found
+     * @throws DAOException if a database access error occurs
+     */
     public Shift find(int id) {
         
         Shift shift = null;
@@ -40,7 +59,6 @@ public class ShiftDAO {
                     while (rs.next()) {
                         
                         // Store shift data into a HashMap for easy access
-                        
                         HashMap<String, String> ShiftDetail = new HashMap<>();
                         ShiftDetail.put("id", rs.getString("id"));
                         ShiftDetail.put("description", rs.getString("description"));
@@ -54,8 +72,7 @@ public class ShiftDAO {
                         ShiftDetail.put("lunchThreshold", rs.getString("lunchthreshold"));
                         
                         // Create a Shift object using the extracted data
-                        shift = new Shift (ShiftDetail);
-                        
+                        shift = new Shift(ShiftDetail);
                     }
 
                 }
@@ -69,29 +86,26 @@ public class ShiftDAO {
 
         } finally {
 
-             // Ensure ResultSet and PreparedStatement are closed properly
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
+            // Ensure ResultSet and PreparedStatement are closed properly
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                throw new DAOException(e.getMessage());
             }
 
         }
 
         return shift;
-
     }
-    
-     // Method to find a shift by employee badge
+
+    /**
+     * Retrieves the shift assigned to an employee based on their badge ID.
+     *
+     * @param badge the Badge object representing the employee's badge
+     * @return a Shift object, or null if no shift is assigned to the badge
+     * @throws DAOException if a database access error occurs
+     */
     public Shift find(Badge badge) {
         
         // Variable to store the found shift
@@ -122,8 +136,6 @@ public class ShiftDAO {
                         // Retrieve the shift ID associated with the badge
                         int shiftId = rs.getInt("shiftid");
                         shift = find(shiftId);
-                
-
                     }
 
                 }
@@ -132,29 +144,20 @@ public class ShiftDAO {
 
         } catch (SQLException e) {
             
-             // Handle SQL exceptions by throwing a DAOException
+            // Handle SQL exceptions by throwing a DAOException
             throw new DAOException(e.getMessage());
 
         } finally {
 
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
-                }
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                throw new DAOException(e.getMessage());
             }
 
         }
 
         return shift;
-
     }
-} 
+}
