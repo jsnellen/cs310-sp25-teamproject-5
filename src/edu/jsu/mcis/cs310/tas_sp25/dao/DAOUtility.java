@@ -157,6 +157,12 @@ public final class DAOUtility {
     private static final DateTimeFormatter ADJUSTED_FORMATTER = 
         DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
     
+    
+    /** 
+     * @param punchlist
+     * @param shift
+     * @return String
+     */
     public static String getPunchListPlusTotalsAsJSON(ArrayList<Punch> punchlist, Shift shift) {
         // Create list to hold punch data
         ArrayList<Map<String, String>> jsonPunchList = new ArrayList<>();

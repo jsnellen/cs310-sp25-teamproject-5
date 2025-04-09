@@ -64,7 +64,7 @@ public class Absenteeism {
         this.employee = e;  // can get rid of!
         this.employeeid = e.getId();
         this.startDate = ts;
-        this.percentage = percentage2;
+        this.percentage = percentage2.setScale(2);
     }
 
     /**

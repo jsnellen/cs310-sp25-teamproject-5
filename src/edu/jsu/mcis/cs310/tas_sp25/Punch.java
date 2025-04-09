@@ -329,11 +329,4 @@ public class Punch {
         return build.toString();
     }
 
-    /**
-     * Gets the number of minutes worked by comparing the punch and shift stop time.
-     *
-     * @param shift the shift configuration
-     * @return number of minutes worked
-     */
-
 } 

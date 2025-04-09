@@ -6,12 +6,14 @@ package edu.jsu.mcis.cs310.tas_sp25.dao;
 
 import edu.jsu.mcis.cs310.tas_sp25.*;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.HashMap;
 
 public class ShiftDAO {
 
     /** SQL query to find a shift by shift ID. */
-    private static final String FIND_BY_ID = "SELECT * FROM shift WHERE id = ?";
+    //private static final String FIND_BY_ID = "SELECT * FROM shift WHERE id = ?";
+    private static final String FIND_BY_ID = "SELECT * FROM dailyschedule JOIN shift ON shift.dailyscheduleid = dailyschedule.id WHERE shift.id = ?";
 
     /** SQL query to find a shift by employee badge ID. */
     private static final String FIND_BY_BADGE = "SELECT shiftid FROM employee WHERE badgeid =?";
@@ -106,6 +108,7 @@ public class ShiftDAO {
      * @return a Shift object, or null if no shift is assigned to the badge
      * @throws DAOException if a database access error occurs
      */
+
     public Shift find(Badge badge) {
         
         // Variable to store the found shift
@@ -160,4 +163,61 @@ public class ShiftDAO {
 
         return shift;
     }
+
+    public Shift find(Badge badge, LocalDate ts) {
+        
+        // Variable to store the found shift
+        Shift shift = null; 
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            
+            // Establish database connection using DAOFactory
+            Connection conn = daoFactory.getConnection();
+
+            if (conn.isValid(0)) {
+                   
+                // Prepare the SQL query to find a shift by employee badge
+                ps = conn.prepareStatement(FIND_BY_BADGE);
+                ps.setString(1, badge.getId());
+
+                // Execute the query and check if there are results
+                boolean hasresults = ps.execute();
+
+                if (hasresults) {
+
+                    rs = ps.getResultSet();
+
+                    if (rs.next()) {
+                        
+                        // Retrieve the shift ID associated with the badge
+                        int shiftId = rs.getInt("shiftid");
+                        shift = find(shiftId);
+                    }
+
+                }
+
+            }
+
+        } catch (SQLException e) {
+            
+            // Handle SQL exceptions by throwing a DAOException
+            throw new DAOException(e.getMessage());
+
+        } finally {
+
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+            } catch (SQLException e) {
+                throw new DAOException(e.getMessage());
+            }
+
+        }
+
+        return shift;
+    }
+
+
 }
