@@ -85,7 +85,6 @@ public class AbsenteeismTest {
         assertEquals("#28DC3FB8 (Pay Period Starting 09-02-2018): 2.50%", a2.toString());
         
     }
-    
     @Test
     public void testAbsenteeismShift1Weekend() {
         
