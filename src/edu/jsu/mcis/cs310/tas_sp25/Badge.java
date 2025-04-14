@@ -1,5 +1,7 @@
 package edu.jsu.mcis.cs310.tas_sp25;
 
+import java.util.zip.CRC32;
+
 /**
  * The Badge class represents an identification badge used in the time and attendance system.
  * It contains details about the badge's ID and description, which can be used to uniquely identify
@@ -22,6 +24,17 @@ public class Badge {
     public Badge(String id, String description) {
         this.id = id;
         this.description = description;
+    }
+    
+    // Constructor used for creating new badges.
+    public Badge(String description){
+        this.description = description;
+        
+        CRC32 crc = new CRC32();
+        crc.update(description.getBytes());
+        long checksum = crc.getValue();
+        
+        this.id = String.format("%08X", checksum);
     }
 
     /**

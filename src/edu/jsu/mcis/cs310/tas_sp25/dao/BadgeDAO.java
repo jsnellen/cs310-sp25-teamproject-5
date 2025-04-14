@@ -10,6 +10,9 @@ import java.sql.*;
 public class BadgeDAO {
 
     private static final String QUERY_FIND = "SELECT * FROM badge WHERE id = ?";
+    private static final String QUERY_INSERT = "INSERT INTO badge (id, description) VALUES (?, ?)";
+    private static final String QUERY_UPDATE = "UPDATE badge SET description = ? WHERE id = ?";
+    private static final String QUERY_DELETE = "DELETE FROM badge WHERE id = ?";
 
     private final DAOFactory daoFactory;
 
@@ -72,5 +75,44 @@ public class BadgeDAO {
         }
 
         return badge;
+    }
+    
+    
+    public boolean create(Badge badge) {
+        try (Connection conn = daoFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(QUERY_INSERT)) {
+
+            ps.setString(1, badge.getId());
+            ps.setString(2, badge.getDescription());
+            return (ps.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage());
+        }
+    }
+
+    public boolean update(Badge badge) {
+        try (Connection conn = daoFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(QUERY_UPDATE)) {
+
+            ps.setString(1, badge.getDescription());
+            ps.setString(2, badge.getId());
+            return (ps.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage());
+        }
+    }
+
+    public boolean delete(String id) {
+        try (Connection conn = daoFactory.getConnection();
+            PreparedStatement ps = conn.prepareStatement(QUERY_DELETE)) {
+
+            ps.setString(1, id);
+            return (ps.executeUpdate() == 1);
+
+        } catch (SQLException e) {
+            throw new DAOException(e.getMessage());
+        }
     }
 } 
