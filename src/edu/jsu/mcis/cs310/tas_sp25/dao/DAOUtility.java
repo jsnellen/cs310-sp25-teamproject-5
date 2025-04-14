@@ -7,12 +7,11 @@ import java.time.format.DateTimeFormatter;
 import com.github.cliftonlabs.json_simple.*;
 import edu.jsu.mcis.cs310.tas_sp25.EventType;
 import edu.jsu.mcis.cs310.tas_sp25.Punch;
+import edu.jsu.mcis.cs310.tas_sp25.ScheduleOverride;
 import edu.jsu.mcis.cs310.tas_sp25.Shift;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.temporal.TemporalAdjusters;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 
 /**
  * Utility class for DAO-related functions. This class provides static methods
@@ -134,6 +133,20 @@ public final class DAOUtility {
      * @return The total scheduled minutes for the pay period.
      */
     private static long getScheduledMinutes(Shift shift, ArrayList<Punch> punchList) {
+
+        DAOFactory daoFactory = new DAOFactory("tas.jdbc");
+        ScheduleOverrideDAO scheduleOverrideDAO = daoFactory.getScheduleOverrideDAO();
+
+        ArrayList<ScheduleOverride> s1 = scheduleOverrideDAO.list();
+
+        DateTimeFormatter start = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MM/dd/YYYY HH:mm:ss");
+        //DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+
+        String b = punchList.get(0).getBadgeId();
+
+        System.err.println("Scheduled Minutes test: " + b);
+        
         LocalDate startDate = punchList.get(0).getAdjustedTimestamp().toLocalDate()
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         LocalDate endDate = startDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
@@ -145,10 +158,38 @@ public final class DAOUtility {
         
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             if (shift.isWorkDay(date.getDayOfWeek())) {
+                System.err.println("Day of Week test: " + date.getDayOfWeek().getValue());
+                System.err.println(date);
+
+                //if (date.isAfter(LocalDate.parse("2018-09-02")) && date.isBefore(LocalDate.parse("2018-09-08"))) {
+                //    if (date.getDayOfWeek().getValue() == 1) {
+                //        scheduledMinutes = scheduledMinutes - 450L;
+                //    }
+                //}
+                /* 
+                for (ScheduleOverride override : s1) {
+                    LocalDate date1 = LocalDate.parse(override.getStart(), start);
+                    LocalDate date2 = LocalDate.parse(override.getEnd(), start);
+                    System.err.println(date1 + " " + date2);
+                     
+                    if (date.isAfter(date1) && date.isBefore(date2)) {
+                        if (date.getDayOfWeek().getValue() == override.getDay()) {
+                            if (override.getDailyScheduleId() == 5) {
+                                scheduledMinutes = scheduledMinutes - 450L;
+                                System.err.println(scheduledMinutes);
+                            }
+                            if (override.getDailyScheduleId() == 6) {
+                                scheduledMinutes = scheduledMinutes - 60L;
+                                System.err.println(scheduledMinutes);
+                            }
+                        }
+                    }
+                }*/
                 workingDays++;
             }
         }
         
+        System.err.println(workingDays * scheduledMinutes);
         return workingDays * scheduledMinutes;
     }
     

@@ -60,6 +60,8 @@ public class Absenteeism {
      * @param ts the start date of the pay period for this absenteeism.
      * @param percentage2 the absenteeism percentage for this pay period.
      */
+
+     
     public Absenteeism(Employee e, LocalDate ts, BigDecimal percentage2) {
         this.employee = e;  // can get rid of!
         this.employeeid = e.getId();
