@@ -78,41 +78,79 @@ public class BadgeDAO {
     }
     
     
-    public boolean create(Badge badge) {
-        try (Connection conn = daoFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(QUERY_INSERT)) {
+    public boolean create(Badge badge) throws SQLException {
+        PreparedStatement ps = null;
+        
+        try {
+            Connection conn = daoFactory.getConnection();
+            ps = conn.prepareStatement(QUERY_INSERT); 
 
             ps.setString(1, badge.getId());
             ps.setString(2, badge.getDescription());
             return (ps.executeUpdate() == 1);
+            
 
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
         }
+        finally {
+         if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
+                }
+            }
+        }
+        //return (ps.executeUpdate() == 1);
     }
 
     public boolean update(Badge badge) {
-        try (Connection conn = daoFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(QUERY_UPDATE)) {
+       PreparedStatement ps = null;
+        
+        try {
+            Connection conn = daoFactory.getConnection();
+            ps = conn.prepareStatement(QUERY_UPDATE); 
 
-            ps.setString(1, badge.getDescription());
-            ps.setString(2, badge.getId());
+            ps.setString(1, badge.getId());
+            ps.setString(2, badge.getDescription());
             return (ps.executeUpdate() == 1);
+            
 
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
         }
+        finally {
+         if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
+                }
+            }
+        }
+        //return (ps.executeUpdate() == 1);
     }
 
     public boolean delete(String id) {
-        try (Connection conn = daoFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(QUERY_DELETE)) {
+        PreparedStatement ps = null;
+        try {
+            Connection conn = daoFactory.getConnection();
+            ps = conn.prepareStatement(QUERY_DELETE);
 
             ps.setString(1, id);
             return (ps.executeUpdate() == 1);
 
         } catch (SQLException e) {
             throw new DAOException(e.getMessage());
+        } finally {
+         if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    throw new DAOException(e.getMessage());
+                }
+            }
         }
     }
 } 
