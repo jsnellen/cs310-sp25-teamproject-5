@@ -101,9 +101,11 @@ public final class DAOFactory {
     public AbsenteeismDAO getAbsenteeismDAO() {
         return new AbsenteeismDAO(this);
     }
+    
+    public ReportDAO getReportDAO() {
+    return new ReportDAO(this);
+}
 
-    public ScheduleOverrideDAO getScheduleOverrideDAO() {
-        return new ScheduleOverrideDAO(this);
-    }
+    
 }
 
