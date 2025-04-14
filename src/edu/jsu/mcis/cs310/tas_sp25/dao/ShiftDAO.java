@@ -12,7 +12,12 @@ import java.util.HashMap;
 public class ShiftDAO {
 
     /** SQL query to find a shift by shift ID. */
-    //private static final String FIND_BY_ID = "SELECT * FROM shift WHERE id = ?";
+
+    /**SQL statement for version 1 database
+        private static final String FIND_BY_ID = "SELECT * FROM shift WHERE id = ?";
+     */
+
+    //Changed this SQL statement to join shift with dailyschedule to conform to the version 2 database
     private static final String FIND_BY_ID = "SELECT * FROM dailyschedule JOIN shift ON shift.dailyscheduleid = dailyschedule.id WHERE shift.id = ?";
 
     /** SQL query to find a shift by employee badge ID. */
@@ -139,6 +144,7 @@ public class ShiftDAO {
                         // Retrieve the shift ID associated with the badge
                         int shiftId = rs.getInt("shiftid");
                         shift = find(shiftId);
+
                     }
 
                 }
@@ -194,6 +200,7 @@ public class ShiftDAO {
                         // Retrieve the shift ID associated with the badge
                         int shiftId = rs.getInt("shiftid");
                         shift = find(shiftId);
+
                     }
 
                 }
