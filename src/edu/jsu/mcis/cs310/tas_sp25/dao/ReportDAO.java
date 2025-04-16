@@ -7,27 +7,6 @@ public class ReportDAO {
 
     private final DAOFactory daoFactory;
 
-    /* Query to get all employee information from employee, badge and department tables
-    * 
-
-    private static final String query = """
-        SELECT
-            b.BadgeID,
-            b.Description AS FullName,
-            d.Description AS Department,
-            CASE 
-                WHEN e.EmployeeTypeID = 0 THEN 'Temporary Employee'
-                ELSE 'Full-Time Employee'
-            END AS Type
-        FROM employee e
-        JOIN badge b ON e.BadgeID = b.BadgeID
-        JOIN department d ON e.DepartmentID = d.ID
-        WHERE e.Active = 1
-        """ + (departmentId != null ? " AND e.DepartmentID = ?" : "") +
-        " ORDER BY b.Description ASC";
-
-        */
-
     private static final String QUERY = "SELECT * FROM badge LEFT OUTER JOIN employee on badge.id = employee.badgeid LEFT OUTER JOIN department on employee.departmentid = department.id";
 
     public ReportDAO(DAOFactory daoFactory) {
