@@ -42,6 +42,9 @@ public class Version2_BadgeSummaryTest {
         
         assertNotNull(jsonExpected);
         assertNotNull(jsonActual);
+        System.out.println("Expected:\n" + jsonExpected.toString());
+        System.out.println("Actual:\n" + jsonActual.toString());
+
         assertEquals(jsonExpected, jsonActual);
 
     }
@@ -70,6 +73,9 @@ public class Version2_BadgeSummaryTest {
         
         assertNotNull(jsonExpected);
         assertNotNull(jsonActual);
+        System.out.println("Expected:\n" + jsonExpected.toString());
+        System.out.println("Actual:\n" + jsonActual.toString());
+
         assertEquals(jsonExpected, jsonActual);
 
     }
