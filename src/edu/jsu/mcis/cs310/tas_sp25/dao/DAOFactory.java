@@ -104,8 +104,10 @@ public final class DAOFactory {
     
     public ReportDAO getReportDAO() {
     return new ReportDAO(this);
-}
+    }
 
-    
+    public ScheduleOverrideDAO getScheduleOverrideDAO() {
+        return new ScheduleOverrideDAO(this);
+    }
 }
 

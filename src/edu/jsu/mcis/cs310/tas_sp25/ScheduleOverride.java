@@ -55,11 +55,6 @@ public class ScheduleOverride {
         return end;
     }
 
-    /**
-     * Returns the description associated with the badge.
-     *
-     * @return the description of the badge.
-     */
     public String getBadgeId() {
         return badgeid;
     }
@@ -87,7 +82,9 @@ public class ScheduleOverride {
         s.append('#').append(id).append(' ')
         .append("start: ").append(start).append(", ")
         .append("end: ").append(end).append(", ")
-        .append("badgeid: ").append(badgeid).append(" ");
+        .append("badgeid: ").append(badgeid).append(" ")
+        .append("day: ").append(day).append(" ")
+        .append("dailyscheduleid: ").append(dailyscheduleid);
 
         return s.toString();
 
