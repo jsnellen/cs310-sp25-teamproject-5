@@ -138,10 +138,7 @@ public final class DAOUtility {
         DAOFactory daoFactory = new DAOFactory("tas.jdbc");
         ScheduleOverrideDAO sDAO = daoFactory.getScheduleOverrideDAO();
         ShiftDAO shiftDAO = daoFactory.getShiftDAO();
-        Shift tempShift1 = shiftDAO.find(5);
-        System.err.println("SHIFT 5: " + tempShift1);
-        Shift tempShift2 = shiftDAO.find(6);
-        Shift tempShift = null;
+
         String tempBadgeId = punchList.get(1).getBadgeId();
         String tempBadgeId2 = null;
         ArrayList<ScheduleOverride> slist = sDAO.list();
@@ -154,16 +151,6 @@ public final class DAOUtility {
                 .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
         LocalDate endDate = startDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
 
-        for (ScheduleOverride s : slist) {
-            LocalDate tempDateStart = LocalDate.parse(s.getStart(), format);
-            if (tempDateStart.isEqual(startDate)) {
-                tempBadgeId2 = s.getBadgeId();
-                if (tempBadgeId2 == null || tempBadgeId == tempBadgeId2) {
-                    override1 = s;
-                    System.err.println(override1);
-                }
-            }
-        }
 
         
         long workingDays = 0l;
@@ -174,17 +161,39 @@ public final class DAOUtility {
 
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             if (shift.isWorkDay(date.getDayOfWeek())) {
+
+                for (ScheduleOverride s : slist) {
+                    LocalDate tempDateStart = LocalDate.parse(s.getStart(), format);
+                    if (tempDateStart.isEqual(startDate)) {
+                        if (s.getDay() == date.getDayOfWeek().ordinal()) {
+                            tempBadgeId2 = s.getBadgeId();
+                            System.err.println("OVERRIDE BADGE: " + tempBadgeId2);
+                            System.err.println(tempBadgeId);
+                            if (tempBadgeId.equals(tempBadgeId2)) {
+                                override1 = s;
+                                System.err.println(override1);
+                            } else if (tempBadgeId2 == null) {
+                                override1 = s;
+                                System.err.println(override1);
+                            }
+                        }
+                    }
+                }
+
                 if (override1 != null) {
                     if (date.getDayOfWeek().ordinal() == override1.getDay()) {
-                        tempShift = shiftDAO.find(override1.getDailyScheduleId());
-                        System.err.println(override1.getDailyScheduleId());
-                        scheduledMinutes += tempShift.getShiftDuration().toMinutes() - tempShift.getLunchDuration().toMinutes();
-                        /* 
+
+                        //tempShift = shiftDAO.find(override1.getDailyScheduleId());
+                        //System.err.println(override1.getDailyScheduleId());
+                        //System.err.println(tempShift);
+                        //scheduledMinutes += tempShift.getShiftDuration().toMinutes() - tempShift.getLunchDuration().toMinutes();
+
+                        
                         if (override1.getDailyScheduleId() == 5) {
                             scheduledMinutes += 0l;
                         } else {
                             scheduledMinutes += 420l;
-                        }*/
+                        }
                     } else {
                         scheduledMinutes += shift.getShiftDuration().toMinutes() - shift.getLunchDuration().toMinutes();
                     }
@@ -197,104 +206,6 @@ public final class DAOUtility {
         System.err.println(scheduledMinutes);
         return scheduledMinutes;
     }
-
-     /*
-    private static long getScheduledMinutes(Shift shift, ArrayList<Punch> punchList) {
-        LocalDate startDate = punchList.get(0).getAdjustedTimestamp().toLocalDate()
-                .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        LocalDate endDate = startDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
-        
-        long workingDays = 0;
-        long shiftDurationMinutes = shift.getShiftDuration().toMinutes();
-        long lunchDurationMinutes = shift.getLunchDuration().toMinutes();
-        long scheduledMinutes = shiftDurationMinutes - lunchDurationMinutes;
-        
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            if (shift.isWorkDay(date.getDayOfWeek())) {
-                workingDays++;
-            }
-        }
-        
-        return workingDays * scheduledMinutes;
-    } */
-
-    /*
-    private static long getScheduledMinutes(Shift shift, ArrayList<Punch> punchList) {
-
-        
-        DAOFactory daoFactory = new DAOFactory("tas.jdbc");
-        ScheduleOverrideDAO sDAO = daoFactory.getScheduleOverrideDAO();
-        ShiftDAO shiftDAO = daoFactory.getShiftDAO();
-        Shift tempShift1 = shiftDAO.find(5);
-        System.err.println(tempShift1);
-        Shift tempShift2 = shiftDAO.find(6);
-        String tempBadgeId = punchList.get(1).getBadgeId();
-        String tempBadgeId2 = null;
-
-        long overrideDuration = 0L;
-
-        ArrayList<ScheduleOverride> slist = sDAO.list();
-
-        System.err.println(slist);
-
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-
-        LocalDate startDate = punchList.get(0).getAdjustedTimestamp().toLocalDate()
-                .with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        LocalDate endDate = startDate.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
-
-        
-        for (ScheduleOverride s : slist) {
-            LocalDate tempDateStart = LocalDate.parse(s.getStart(), format);
-            LocalDate tempDateEnd = LocalDate.parse(s.getEnd(), format);
-            tempBadgeId2 = s.getBadgeId();
-            if (startDate.isEqual(tempDateStart)) {
-                if (s.getDailyScheduleId() == 5) {
-                    if (tempBadgeId2 == null || tempBadgeId == tempBadgeId2) {
-                    //overrideDuration = tempShift1.getShiftDuration().toMinutes();
-                    overrideDuration = shift.getShiftDuration().toMinutes() - shift.getLunchDuration().toMinutes();
-                    System.err.println("SHIFT DURATION TEST: " + overrideDuration);
-                    }
-                }
-                if (s.getDailyScheduleId() == 6) {
-                    if (tempBadgeId2 == null || tempBadgeId == tempBadgeId2) {
-                        //overrideDuration = tempShift1.getShiftDuration().toMinutes();
-                        overrideDuration = 60L;
-                        System.err.println("SHIFT DURATION TEST: " + overrideDuration);
-                        }
-                }
-            }
-        }
-        
-        long workingDays = 0;
-        long shiftDurationMinutes = shift.getShiftDuration().toMinutes();
-        long lunchDurationMinutes = shift.getLunchDuration().toMinutes();
-        long scheduledMinutes = shiftDurationMinutes - lunchDurationMinutes;
-        
-        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-            if (shift.isWorkDay(date.getDayOfWeek())) {
-                /* 
-                for (ScheduleOverride s : slist) {
-                    LocalDate tempDateStart = LocalDate.parse(s.getStart(), format);
-                    LocalDate tempDateEnd = LocalDate.parse(s.getEnd(), format);
-                    System.err.println("SCHEDULE TEST: " + tempDateStart + " " + tempDateEnd + " " + date);
-
-                    if (date.isAfter(tempDateStart) && date.isBefore(tempDateEnd)) {
-                        if (date.getDayOfWeek().ordinal() == s.getDay()) {
-                            System.err.println("AAAAAAAAAAAAHHHHHHHH");
-                        }
-                    }
-                    
-                }
-
-
-                workingDays++;
-            }
-        }
-        
-        return (workingDays * scheduledMinutes) - overrideDuration;
-    } */
     
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = 
         DateTimeFormatter.ofPattern("EEE MM/dd/yyyy HH:mm:ss");
