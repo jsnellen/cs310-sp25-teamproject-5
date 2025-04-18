@@ -139,7 +139,7 @@ public final class DAOUtility {
         ScheduleOverrideDAO sDAO = daoFactory.getScheduleOverrideDAO();
         ShiftDAO shiftDAO = daoFactory.getShiftDAO();
         Shift tempShift1 = shiftDAO.find(5);
-        System.err.println(tempShift1);
+        System.err.println("SHIFT 5: " + tempShift1);
         Shift tempShift2 = shiftDAO.find(6);
         Shift tempShift = null;
         String tempBadgeId = punchList.get(1).getBadgeId();
