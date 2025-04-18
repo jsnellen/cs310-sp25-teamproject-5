@@ -78,7 +78,9 @@ public class BadgeDAO {
     }
     
     
-    public boolean create(Badge badge) throws SQLException {
+    public boolean create(Badge badge) {
+        
+        boolean result = false;
         PreparedStatement ps = null;
         
         try {
@@ -87,22 +89,22 @@ public class BadgeDAO {
 
             ps.setString(1, badge.getId());
             ps.setString(2, badge.getDescription());
-            return (ps.executeUpdate() == 1);
+            result = (ps.executeUpdate() == 1);
             
 
-        } catch (SQLException e) {
-            throw new DAOException(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         finally {
          if (ps != null) {
                 try {
                     ps.close();
-                } catch (SQLException e) {
-                    throw new DAOException(e.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
-        //return (ps.executeUpdate() == 1);
+        return result;
     }
 
     public boolean update(Badge badge) {
